@@ -118,6 +118,21 @@ test("builds a WinGet-only USB command for all five diagnostics", () => {
   assert.match(command, /\.ExitCode/i);
   assert.match(command, /\.WaitForExit\s*\(\s*5000\s*\)/i);
   assert.match(command, /taskkill\.exe/i);
+  assert.match(
+    command,
+    /Get-MpThreatDetection\s+-ErrorAction\s+Stop/i,
+    "Defender threat enumeration must fail closed",
+  );
+  assert.match(
+    command,
+    /Test-Path[\s\S]*Get-FileHash[\s\S]*SHA256/i,
+    "downloaded files must be revalidated after Defender scans them",
+  );
+  assert.match(
+    command,
+    /Killer\.ExitCode[\s\S]*Process\.HasExited[\s\S]*Process\.Kill\s*\(/i,
+    "a failed taskkill must fall back to bounded direct process termination",
+  );
   assert.match(command, /INCOMPLETE/i);
   assert.match(command, /throw/i);
   assert.match(command, /\.staging/i);
