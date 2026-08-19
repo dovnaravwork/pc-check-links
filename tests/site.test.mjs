@@ -79,6 +79,12 @@ test("offers one-click copy actions for USB preparation and native autocheck", (
   assertPattern(html, /\bdata-action=["']copy-usb-command["']/i);
   assertPattern(html, /\bdata-action=["']copy-autocheck-command["']/i);
   assertPattern(html, /\bdata-usb-drive\b/i);
+  assertPattern(html, /\bdata-usb-command-preview\b/i);
+  assertPattern(html, /\bdata-autocheck-command-preview\b/i);
+  assert.ok(
+    tags("textarea").filter((tag) => /command-preview/i.test(tag)).every((tag) => /\breadonly\b/i.test(tag)),
+    "terminal command previews must be read-only",
+  );
   assertPattern(script, /PcCheckCommands\.buildUsbPrepCommand\s*\(/);
   assertPattern(script, /PcCheckCommands\.buildAutocheckCommand\s*\(/);
 });
@@ -109,8 +115,20 @@ test("builds a WinGet-only USB command for all five diagnostics", () => {
   assert.match(command, /File\s*=.*SHA256\s*=/i);
   assert.match(command, /WaitForExit\s*\(\s*\$TimeoutMs\s*\)/i);
   assert.match(command, /\.Kill\s*\(\s*\)/i);
-  assert.match(command, /\$BeforeCount/i);
-  assert.match(command, /\$AfterCount/i);
+  assert.match(command, /\.ExitCode/i);
+  assert.match(command, /\.WaitForExit\s*\(\s*5000\s*\)/i);
+  assert.match(command, /taskkill\.exe/i);
+  assert.match(command, /INCOMPLETE/i);
+  assert.match(command, /throw/i);
+  assert.match(command, /\.staging/i);
+  assert.match(command, /source\s+export/i);
+  assert.match(command, /https:\/\/cdn\.winget\.microsoft\.com\/cache/i);
+  assert.match(command, /Microsoft\.Winget\.Source_8wekyb3d8bbwe/i);
+  assert.match(command, /TrustLevel/i);
+  assert.match(command, /DriveType[^;]{0,100}(?:-ne|!=)\s*2/i);
+  for (const version of ["2.21", "2.70.0", "9.9.2", "8.50", "17.0.16.0"]) {
+    assert.match(command, new RegExp(version.replaceAll(".", "\\.")));
+  }
   assert.ok(
     command.indexOf("CPUID.CPU-Z") > command.indexOf("OCBase.OCCT.Personal"),
     "the known-slow CPU-Z download must run last",
@@ -118,7 +136,6 @@ test("builds a WinGet-only USB command for all five diagnostics", () => {
   assert.doesNotMatch(command, /winget\s+(?:install|import)/i);
   assert.doesNotMatch(command, /ignore-security-hash/i);
   assert.doesNotMatch(command, /--architecture/i);
-  assert.doesNotMatch(command, /\.ExitCode/i);
   assert.throws(() => api.buildUsbPrepCommand("C:"), /D.*Z/i);
   assert.throws(() => api.buildUsbPrepCommand("F:\\PC"), /D.*Z/i);
 });
@@ -138,6 +155,8 @@ test("builds a local-only autocheck command without stress or security bypasses"
   assert.doesNotMatch(command, /(?:Invoke-WebRequest|curl|wget|Start-BitsTransfer|https?:\/\/)/i);
   assert.doesNotMatch(command, /(?:Invoke-Expression|\biex\b|ExecutionPolicy|Add-MpPreference|Set-MpPreference)/i);
   assert.doesNotMatch(command, /(?:OCCT|3D\s+Adaptive|Power\s+test)/i);
+  assert.doesNotMatch(command, /InstanceId|Exception\.Message/i);
+  assert.match(command, /System32\\notepad\.exe/i);
 });
 
 test("copies both generated commands through the visible buttons", async () => {
@@ -145,6 +164,8 @@ test("copies both generated commands through the visible buttons", async () => {
   const copied = [];
   const automationFeedback = { textContent: "" };
   const driveInput = { value: "G:" };
+  const autoPreview = { value: "" };
+  const usbPreview = { value: "" };
   const button = (name) => ({
     addEventListener(type, handler) {
       if (type === "click") handlers[name] = handler;
@@ -154,6 +175,8 @@ test("copies both generated commands through the visible buttons", async () => {
     ['[data-action="copy-autocheck-command"]', button("autocheck")],
     ['[data-action="copy-usb-command"]', button("usb")],
     ["[data-usb-drive]", driveInput],
+    ["[data-autocheck-command-preview]", autoPreview],
+    ["[data-usb-command-preview]", usbPreview],
     ["[data-automation-feedback]", automationFeedback],
   ]);
   const context = {
@@ -176,6 +199,8 @@ test("copies both generated commands through the visible buttons", async () => {
 
   assert.equal(copied[0], context.window.PcCheckCommands.buildAutocheckCommand());
   assert.equal(copied[1], context.window.PcCheckCommands.buildUsbPrepCommand("G:"));
+  assert.equal(autoPreview.value, copied[0]);
+  assert.equal(usbPreview.value, copied[1]);
   assert.match(automationFeedback.textContent, /Скопировано/i);
 });
 
