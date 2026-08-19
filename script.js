@@ -65,6 +65,10 @@
     }
   }
 
+  function touchSession() {
+    if (!state.claims.startedAt) state.claims.startedAt = new Date().toISOString();
+  }
+
   function normalizedStatuses() {
     return checkElements.map((element) => {
       return effectiveStatus(state.checks[element.dataset.check]);
@@ -148,8 +152,12 @@
     const lines = [
       "ПРОВЕРКА Б/У WINDOWS-ПК",
       `Модель / объявление: ${formatClaim("claim")}`,
+      `Профиль: ${formatClaim("profile", "не выбран")}`,
+      `Идентификатор ПК: ${formatClaim("machine")}`,
       `Цена: ${formatClaim("price")}`,
       `Дата и место: ${formatClaim("meeting")}`,
+      `Начало сессии: ${formatClaim("startedAt")}`,
+      `Отчёт создан: ${new Date().toISOString()}`,
       `Manifest флешки: ${formatClaim("manifest")}`,
       "",
       "РЕЗУЛЬТАТЫ",
@@ -241,6 +249,26 @@
     );
   }
 
+  function browserTest(kind) {
+    const result = document.querySelector("[data-browser-result]");
+    const grid = document.querySelector("[data-color-grid]");
+    if (!result) return;
+    if (kind === "screen") {
+      if (grid) grid.hidden = false;
+      result.textContent = "Посмотри на красный, зелёный, синий и белый поля: нет пятен, полос или мерцания? Проверка экрана завершена.";
+      result.dataset.state = "pass";
+    } else if (kind === "keys") {
+      result.textContent = "Нажми A, Enter, Esc и стрелку. Если клавиша отображается в подсказке — клавиатура работает.";
+      const handler = (event) => { result.textContent = `Получена клавиша: ${event.key}. Проверь остальные вручную.`; result.dataset.state = "pass"; };
+      window.addEventListener("keydown", handler, { once: true });
+    } else {
+      const button = document.createElement("button");
+      button.className = "button small primary"; button.type = "button"; button.textContent = "Воспроизвести тестовый звук";
+      button.addEventListener("click", () => { const audio = new AudioContext(); const oscillator = audio.createOscillator(); const gain = audio.createGain(); oscillator.connect(gain).connect(audio.destination); oscillator.start(); gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.45); oscillator.stop(audio.currentTime + 0.45); result.textContent = "Если звук был слышен — аудио работает."; result.dataset.state = "pass"; });
+      result.replaceChildren(button);
+    }
+  }
+
   function resetProgress() {
     const confirmed = window.confirm("Удалить все поля, заметки и статусы этой проверки?");
     if (!confirmed) return;
@@ -261,6 +289,7 @@
 
   for (const input of claimElements) {
     input.addEventListener("input", () => {
+      touchSession();
       state.claims[input.dataset.claim] = input.value;
       saveState();
       updateVerdict();
@@ -271,6 +300,7 @@
     const id = element.dataset.check;
     for (const button of element.querySelectorAll("[data-status]")) {
       button.addEventListener("click", () => {
+        touchSession();
         state.checks[id] ||= {};
         state.checks[id].status = button.dataset.status;
         saveState();
@@ -290,6 +320,9 @@
   document.querySelector('[data-action="copy-autocheck-command"]')?.addEventListener("click", copyAutocheckCommand);
   document.querySelector('[data-action="copy-usb-command"]')?.addEventListener("click", copyUsbCommand);
   document.querySelector('[data-action="copy-guided-command"]')?.addEventListener("click", copyGuidedCommand);
+  document.querySelector('[data-hero-action="usb"]')?.addEventListener("click", copyUsbCommand);
+  document.querySelector('[data-hero-action="guided"]')?.addEventListener("click", copyGuidedCommand);
+  document.querySelectorAll("[data-browser-test]").forEach((button) => button.addEventListener("click", () => browserTest(button.dataset.browserTest)));
   driveInput?.addEventListener?.("input", renderCommandPreviews);
   document.querySelector('[data-action="print-report"]')?.addEventListener("click", () => {
     if (reportPreview) reportPreview.textContent = buildReport();

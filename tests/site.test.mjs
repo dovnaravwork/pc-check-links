@@ -421,6 +421,9 @@ test("can copy and print a report containing statuses and the verdict", () => {
   );
   assertPattern(script, /verdict/i, "the report must include the computed verdict");
   assertPattern(script, /status/i, "the report must include individual statuses");
+  assertPattern(html, /data-claim=["']profile["']/i, "report needs a selected test profile");
+  assertPattern(html, /data-claim=["']machine["']/i, "report needs a machine identifier");
+  assertPattern(script, /startedAt|Начало сессии/i, "report needs session timing");
   assertPattern(script, /caution:\s*["']Есть оценимый недостаток/i);
   assertPattern(script, /stop:\s*["']Обнаружен стоп-фактор/i);
   assertPattern(script, /unverified:\s*["']Положительный результат не сформирован/i);

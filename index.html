@@ -29,8 +29,8 @@
         <h1 id="hero-title">Не покупай<br>железо <em>на словах.</em></h1>
         <p class="lead">На встрече заложи примерно 25–30 минут: сверить комплектующие, SMART, физическое состояние и коротко проверить стабильность. После покупки дома можно пройти 90–120-минутный протокол, а затем Maximum на 8–12+ часов.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#automation">Автопроверка в 1 команду <span aria-hidden="true">→</span></a>
-          <a class="button ghost" href="#downloads">Подготовить флешку</a>
+          <button class="button primary" type="button" data-hero-action="usb">Подготовить флешку</button>
+          <button class="button ghost" type="button" data-hero-action="guided">Проверить этот ПК</button>
         </div>
       </div>
       <aside class="brief" aria-label="Главное правило проверки">
@@ -38,6 +38,13 @@
         <strong>Сначала сведения.<br>Потом нагрузка.<br>Оплата — последней.</strong>
         <p>Не вводи свои пароли и не отключай защиту Windows ради запуска файла.</p>
       </aside>
+    </section>
+
+    <section id="browser-checks" class="browser-checks" aria-labelledby="browser-checks-title">
+      <div><p class="eyebrow">Браузерная проверка</p><h2 id="browser-checks-title">Экран, клавиши, звук</h2><p>Ничего не скачивает и работает прямо на сайте.</p></div>
+      <div class="browser-tools"><button class="button outline" type="button" data-browser-test="screen">Проверить цвета</button><button class="button outline" type="button" data-browser-test="keys">Проверить клавиши</button><button class="button outline" type="button" data-browser-test="sound">Проверить звук</button></div>
+      <div class="browser-result" data-browser-result role="status" aria-live="polite">Нажми кнопку и следуй подсказке.</div>
+      <div class="color-grid" data-color-grid hidden><span></span><span></span><span></span><span></span></div>
     </section>
 
     <section class="quick-strip" aria-label="Короткий план">
@@ -173,9 +180,11 @@
         <p>Данные остаются только в localStorage этого браузера. Сайт ничего не отправляет. Поля необязательны; не записывай паспортные данные, телефоны или пароли.</p>
       </div>
       <div class="claim-grid">
+        <label><span>Профиль проверки</span><select name="profile" data-claim="profile"><option value="on-site">На месте · 25–30 минут</option><option value="home">Дома · 90–120 минут</option><option value="maximum">Ночь · 8–12+ часов</option></select></label>
         <label><span>Модель / объявление</span><input type="text" name="claim" data-claim="claim" autocomplete="off" placeholder="Например: Ryzen 5 5600 + RTX 3060"></label>
         <label><span>Цена</span><input type="text" name="price" data-claim="price" inputmode="decimal" autocomplete="off" placeholder="Например: 55 000 ₽"></label>
         <label><span>Дата и место</span><input type="text" name="meeting" data-claim="meeting" autocomplete="off" placeholder="Дата, город или магазин"></label>
+        <label><span>Идентификатор ПК / серийный номер</span><input type="text" name="machine" data-claim="machine" autocomplete="off" placeholder="Имя ПК или последние 4 символа S/N"></label>
         <label class="claim-wide"><span>Manifest проверенной флешки</span><textarea name="manifest" data-claim="manifest" rows="3" placeholder="Имя файла · версия · SHA-256 · дата · официальный URL"></textarea></label>
       </div>
       <noscript><p class="noscript-note">JavaScript выключен: инструкция ниже доступна, но статусы, сохранение и отчёт работать не будут.</p></noscript>
