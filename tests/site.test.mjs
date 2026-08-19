@@ -69,7 +69,7 @@ test("loads all runtime code locally, including script.js", () => {
   );
 });
 
-test("offers one-click copy actions for USB preparation and native autocheck", () => {
+test("offers copy actions for guided diagnostics, USB preparation, and native autocheck", () => {
   assert.ok(commandsScript, "commands.js must contain auditable local commands");
   assertPattern(
     html,
@@ -78,15 +78,54 @@ test("offers one-click copy actions for USB preparation and native autocheck", (
   );
   assertPattern(html, /\bdata-action=["']copy-usb-command["']/i);
   assertPattern(html, /\bdata-action=["']copy-autocheck-command["']/i);
+  assertPattern(html, /\bdata-action=["']copy-guided-command["']/i);
   assertPattern(html, /\bdata-usb-drive\b/i);
   assertPattern(html, /\bdata-usb-command-preview\b/i);
   assertPattern(html, /\bdata-autocheck-command-preview\b/i);
+  assertPattern(html, /\bdata-guided-command-preview\b/i);
   assert.ok(
     tags("textarea").filter((tag) => /command-preview/i.test(tag)).every((tag) => /\breadonly\b/i.test(tag)),
     "terminal command previews must be read-only",
   );
   assertPattern(script, /PcCheckCommands\.buildUsbPrepCommand\s*\(/);
   assertPattern(script, /PcCheckCommands\.buildAutocheckCommand\s*\(/);
+  assertPattern(script, /PcCheckCommands\.buildGuidedSessionCommand\s*\(/);
+});
+
+test("builds a fail-closed guided session that installs and opens official tools", () => {
+  const context = { window: {} };
+  vm.runInNewContext(commandsScript, context);
+  const command = context.window.PcCheckCommands.buildGuidedSessionCommand();
+
+  for (const id of [
+    "CPUID.CPU-Z",
+    "TechPowerUp.GPU-Z",
+    "CrystalDewWorld.CrystalDiskInfo",
+    "REALiX.HWiNFO",
+    "OCBase.OCCT.Personal",
+  ]) {
+    assert.match(command, new RegExp(id.replaceAll(".", "\\.")));
+  }
+  assert.match(command, /winget\s+install/i);
+  assert.match(command, /--exact/i);
+  assert.match(command, /--source\s+winget/i);
+  assert.match(command, /--silent/i);
+  assert.match(command, /source\s+export/i);
+  assert.match(command, /Microsoft\.Winget\.Source_8wekyb3d8bbwe/i);
+  assert.match(command, /Get-AuthenticodeSignature/i);
+  assert.match(command, /Start-Process/i);
+  assert.match(command, /Microsoft-Windows-WHEA-Logger/i);
+  assert.match(command, /Kernel-Power|BugCheck/i);
+  assert.match(command, /Display/i);
+  assert.match(command, /Disk|stornvme|storahci/i);
+  assert.match(command, /BASELINE|baseline/i);
+  assert.match(command, /INCOMPLETE/i);
+  assert.match(command, /CPU-Z[^;]{0,300}-txt=/i);
+  assert.match(command, /CrystalDiskInfo[^;]{0,300}\/CopyExit/i);
+  assert.match(command, /OCCT[^;]{0,300}Start-Process/i);
+  assert.doesNotMatch(command, /ignore-security-hash|--force|ExecutionPolicy\s+Bypass/i);
+  assert.doesNotMatch(command, /SendKeys|AutoHotkey|pywinauto|UIAutomation/i);
+  assert.doesNotMatch(command, /(?:OCCT|occt)[^;]{0,200}(?:Power|3D\s+Adaptive|VRAM)[^;]{0,100}(?:--|\/run|Start)/i);
 });
 
 test("builds a WinGet-only USB command for all five diagnostics", () => {
@@ -174,13 +213,14 @@ test("builds a local-only autocheck command without stress or security bypasses"
   assert.match(command, /System32\\notepad\.exe/i);
 });
 
-test("copies both generated commands through the visible buttons", async () => {
+test("copies all generated commands through the visible buttons", async () => {
   const handlers = {};
   const copied = [];
   const automationFeedback = { textContent: "" };
   const driveInput = { value: "G:" };
   const autoPreview = { value: "" };
   const usbPreview = { value: "" };
+  const guidedPreview = { value: "" };
   const button = (name) => ({
     addEventListener(type, handler) {
       if (type === "click") handlers[name] = handler;
@@ -189,9 +229,11 @@ test("copies both generated commands through the visible buttons", async () => {
   const elements = new Map([
     ['[data-action="copy-autocheck-command"]', button("autocheck")],
     ['[data-action="copy-usb-command"]', button("usb")],
+    ['[data-action="copy-guided-command"]', button("guided")],
     ["[data-usb-drive]", driveInput],
     ["[data-autocheck-command-preview]", autoPreview],
     ["[data-usb-command-preview]", usbPreview],
+    ["[data-guided-command-preview]", guidedPreview],
     ["[data-automation-feedback]", automationFeedback],
   ]);
   const context = {
@@ -211,11 +253,14 @@ test("copies both generated commands through the visible buttons", async () => {
 
   await handlers.autocheck();
   await handlers.usb();
+  await handlers.guided();
 
   assert.equal(copied[0], context.window.PcCheckCommands.buildAutocheckCommand());
   assert.equal(copied[1], context.window.PcCheckCommands.buildUsbPrepCommand("G:"));
   assert.equal(autoPreview.value, copied[0]);
   assert.equal(usbPreview.value, copied[1]);
+  assert.equal(copied[2], context.window.PcCheckCommands.buildGuidedSessionCommand());
+  assert.equal(guidedPreview.value, copied[2]);
   assert.match(automationFeedback.textContent, /Скопировано/i);
 });
 
@@ -367,16 +412,39 @@ test("walks a novice through the OCCT support countdown and emergency Stop", () 
   );
 });
 
-test("uses an adaptive purchase load that reaches 100 percent without Power test", () => {
-  const load = sliceBetween(html, 'data-check="load"', 'data-check="ports"');
+test("defines a 90-to-120-minute purchase screen with separate CPU, memory, GPU, and VRAM stages", () => {
+  const load = sliceBetween(html, 'id="test-profiles"', 'data-check="ports"');
+  assertPattern(load, /(?:90[–-]120|90\s*[-–]\s*120)[^<]{0,40}мин/i);
+  assertPattern(load, /CPU-only|CPU отдельно/i);
+  assertPattern(load, /CPU\+RAM|CPU и RAM/i);
+  assertPattern(load, /Memory[^<]{0,120}15\s*мин/i);
   assertPattern(load, /3D\s+Adaptive/i);
   assertPattern(load, /Variable/i);
   assertPattern(load, /15\s*%[^<]{0,100}100\s*%/i);
-  assertPattern(load, /\+?5\s*%[^<]{0,80}20\s*сек/i);
-  assertPattern(load, /3D[\s\S]{0,300}7\s*минут/i);
-  assertPattern(load, /CPU[^<]{0,100}5\s*минут/i);
-  assertPattern(load, /Memory[^<]{0,100}5\s*минут/i);
-  assertPattern(load, /не\s+запускай[^<]{0,80}\bPower\b/i);
+  assertPattern(load, /\+?5\s*%[^<]{0,80}(?:минут|мин)/i);
+  assertPattern(load, /3D[\s\S]{0,300}30\s*мин/i);
+  assertPattern(load, /VRAM[^<]{0,120}80\s*%[^<]{0,120}15\s*мин/i);
+});
+
+test("defines a maximum 8-to-12-plus-hour profile without claiming one-click automation", () => {
+  const profiles = sliceBetween(html, 'id="test-profiles"', 'id="route"');
+  assertPattern(profiles, /8[–-]12\+?\s*час/i);
+  assertPattern(profiles, /MemTest86[^<]{0,180}4[^<]{0,80}(?:проход|pass)/i);
+  assertPattern(profiles, /3D\s+Standard[^<]{0,180}3\s*[×x]\s*10\s*мин/i);
+  assertPattern(profiles, /Adaptive[^<]{0,180}90\s*мин/i);
+  assertPattern(profiles, /Switch[^<]{0,180}20\s*%[^<]{0,80}90\s*%[^<]{0,80}330\s*мс/i);
+  assertPattern(profiles, /VRAM[^<]{0,180}80\s*%[^<]{0,80}30\s*мин/i);
+  assertPattern(profiles, /Personal\s+Free/i);
+  assertPattern(profiles, /Supporter/i);
+  assertPattern(profiles, /Enterprise/i);
+  assertPattern(profiles, /(?:не\s+одн|не является одн|нельзя[^.]{0,80}одн)[^.]{0,80}(?:клик|кнопк)/i);
+});
+
+test("keeps Power optional, staged, supervised, and unable to certify the PSU", () => {
+  assertPattern(html, /Power[^<]{0,180}(?:опциональ|необязател)/i);
+  assertPattern(html, /Power[\s\S]{0,400}2\s*мин[\s\S]{0,220}10\s*мин[\s\S]{0,220}20[–-]30\s*мин/i);
+  assertPattern(html, /Power[\s\S]{0,500}(?:под наблюдением|supervised|не оставляй)/i);
+  assertPattern(html, /Power[\s\S]{0,500}(?:не доказывает|не подтверждает)[^.<]{0,100}(?:исправность|здоровье)[^.<]{0,60}БП/i);
 });
 
 test("separates GPU core, hotspot, and memory and orders thermal remediation", () => {
