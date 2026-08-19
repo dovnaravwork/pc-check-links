@@ -27,7 +27,7 @@
       <div class="hero-copy">
         <p class="eyebrow light">Проверка б/у Windows-ПК</p>
         <h1 id="hero-title">Не покупай<br>железо <em>на словах.</em></h1>
-        <p class="lead">Маршрут примерно на 35–45 минут для новичка: скачать только у авторов, сверить комплектующие, провести короткую контролируемую нагрузку и уйти с доказательствами. Если что-то задерживает — не торопись.</p>
+        <p class="lead">На встрече заложи примерно 25–30 минут: сверить комплектующие, SMART, физическое состояние и коротко проверить стабильность. После покупки дома можно пройти 90–120-минутный протокол, а затем Maximum на 8–12+ часов.</p>
         <div class="hero-actions">
           <a class="button primary" href="#automation">Автопроверка в 1 команду <span aria-hidden="true">→</span></a>
           <a class="button ghost" href="#downloads">Подготовить флешку</a>
@@ -52,12 +52,25 @@
     <section id="automation" class="section automation" aria-labelledby="automation-title">
       <div class="section-intro compact">
         <div><p class="eyebrow">Минимум кликов</p><h2 id="automation-title">Скопируй.<br>Вставь. Получи отчёт.</h2></div>
-        <p>Открой сайт на проверяемом ПК → нажми кнопку → <b>Win+X → Терминал</b> → вставь команду → Enter. Команда видима на этой странице, не требует администратора и не отключает защиту.</p>
+        <p>Открой сайт на проверяемом ПК → нажми кнопку → <b>Win+X → Терминал</b> → вставь команду → Enter. Запускать Терминал «от имени администратора» не нужно, но установщик отдельной программы может запросить UAC или пароль администратора. Команда видима на странице и не отключает защиту.</p>
       </div>
 
       <div class="automation-grid">
         <article class="automation-card featured">
-          <span class="automation-number">01 · НА ВСТРЕЧЕ</span>
+          <span class="automation-number">01 · МИНИМУМ РУТИНЫ</span>
+          <h3>Подготовить и открыть проверку</h3>
+          <p>Одна команда проверяет доверенный источник WinGet, устанавливает пять официальных утилит, сохраняет baseline событий, автоматически получает отчёты CPU-Z и CrystalDiskInfo и открывает GPU-Z, HWiNFO и OCCT.</p>
+          <label class="command-preview-label"><span>Точная команда, которая попадёт в буфер</span><textarea rows="5" readonly data-guided-command-preview aria-label="Команда подготовки управляемой проверки"></textarea></label>
+          <button class="button dark" type="button" data-action="copy-guided-command">Скопировать запуск проверки</button>
+          <ul>
+            <li>Установка идёт только через точные ID доверенного источника WinGet.</li>
+            <li>Подпись каждого EXE проверяется перед запуском.</li>
+            <li>Нагрузку команда не запускает: настройки и Start/Stop остаются человеку.</li>
+          </ul>
+        </article>
+
+        <article class="automation-card">
+          <span class="automation-number">02 · БЕЗ УСТАНОВКИ</span>
           <h3>Автопроверка Windows</h3>
           <p>За 1–2 минуты собирает CPU, GPU, RAM, состояние дисков, проблемные устройства, WHEA и статус Defender. Сохраняет JSON и открывает понятную сводку на рабочем столе.</p>
           <label class="command-preview-label"><span>Точная команда, которая попадёт в буфер</span><textarea rows="5" readonly data-autocheck-command-preview aria-label="Команда автоматической проверки Windows"></textarea></label>
@@ -81,8 +94,9 @@
       </div>
       <p class="automation-feedback" data-automation-feedback aria-live="polite"></p>
       <details class="automation-details">
-        <summary>Почему не запускается полный тест одной кнопкой?</summary>
-        <p>Автосбор безопасно сокращает рутину, но человек должен увидеть наклейку БП, артефакты, запах, шум и иметь возможность нажать Stop. Поэтому нагрузка до 100% запускается отдельно, только с согласия продавца и под наблюдением.</p>
+        <summary>Почему бесплатный полный тест не является одной кнопкой?</summary>
+        <p>OCCT Personal Free требует ручной настройки и запуска тестов, HWiNFO Free не разрешает автоматическое CLI-логирование, а MemTest86 требует перезагрузки в UEFI. Скрипт сокращает рутину, но человек должен увидеть артефакты, запах и шум и иметь возможность нажать Stop. Поддерживаемая полная CLI-автоматизация OCCT доступна только владельцу Enterprise-лицензии.</p>
+        <p class="automation-consent"><b>Перед копированием:</b> команда устанавливает пять программ через доверенный источник WinGet и автоматически принимает соглашения источника и пакетов. Используй OCCT Personal Free только для личной некоммерческой проверки; для работы или сервиса нужна подходящая платная лицензия.</p>
       </details>
       <noscript><p class="noscript-note">JavaScript выключен: кнопки копирования не работают. Включи JavaScript или используй ручные шаги ниже.</p></noscript>
     </section>
@@ -141,7 +155,7 @@
 
         <article class="tool-row">
           <div class="tool-index">05</div>
-          <div class="tool-main"><p class="tool-meta">OCBASE · Personal · portable EXE · Windows</p><h3>OCCT</h3><p>Короткая нагрузка на видеокарту, процессор и память. Номер актуальной версии смотри на странице автора.</p></div>
+          <div class="tool-main"><p class="tool-meta">OCBASE · Personal · portable EXE · Windows</p><h3>OCCT</h3><p>Раздельная контролируемая нагрузка на видеокарту, процессор и память. Номер актуальной версии смотри на странице автора.</p></div>
           <div class="tool-use"><span>Запускать</span><b>3D Adaptive → CPU → Memory</b></div>
           <div class="tool-actions"><a class="button small outline" href="https://www.ocbase.com/download" target="_blank" rel="noopener noreferrer">Страница автора ↗</a><span>Источник: OCBASE · Personal · Stable</span></div>
         </article>
@@ -167,11 +181,49 @@
       <noscript><p class="noscript-note">JavaScript выключен: инструкция ниже доступна, но статусы, сохранение и отчёт работать не будут.</p></noscript>
     </section>
 
+    <section id="test-profiles" class="section test-profiles" aria-labelledby="profiles-title">
+      <div class="section-intro">
+        <div><p class="eyebrow">Выбери глубину</p><h2 id="profiles-title">Быстрого «полностью исправен» не бывает.</h2></div>
+        <p>Успешный результат означает только: <b>в выполненном протоколе ошибок не обнаружено</b>. Maximum не является одной кнопкой: чем длиннее и разнообразнее нагрузка, тем выше вероятность поймать периодический дефект — гарантии будущей исправности всё равно нет.</p>
+      </div>
+
+      <div class="profile-grid">
+        <article class="profile-card">
+          <span>ПРОВЕРЕНО РАЗРАБОТЧИКОМ · SAFE</span><h3>Контрольный Windows-ПК</h3>
+          <p>Внутренний SafeMode проверяет источник, установку, точные пути, подписи и автоматические отчёты без запуска интерфейсов и нагрузки. Это доказательство работы подготовительного конвейера, а не пользовательский профиль и не проверка стабильности железа.</p>
+        </article>
+        <article class="profile-card featured">
+          <span>HOME SCREEN · 90–120 МИН</span><h3>Полный домашний скрининг</h3>
+          <ol><li>CPU-only Variable — 15 минут.</li><li>CPU+RAM Large / Variable — 15 минут.</li><li>Memory v17, 80% свободной памяти — 15 минут.</li><li>3D Adaptive Variable 15%–100%, +5% в минуту — 30 минут.</li><li>VRAM 80% — 15 минут.</li></ol>
+          <p>Пройди после покупки дома; на встрече используй короткий On-site Screen.</p>
+        </article>
+        <article class="profile-card maximum">
+          <span>MAXIMUM · 8–12+ ЧАСОВ</span><h3>Максимальная вероятность обнаружения</h3>
+          <ol><li>MemTest86 — 4 полных прохода; примерно 2 часа, иногда значительно дольше.</li><li>CPU Steady/Normal — 30 минут; затем CPU Variable/Extreme — 60 минут.</li><li>CPU+RAM Large/Variable — 60 минут; Memory v17 с проверкой данных — 60–90 минут.</li><li>3D Standard — 3 × 10 минут.</li><li>3D Adaptive Variable — 90 минут.</li><li>Switch 20%–90%, каждые 330 мс — 30 минут.</li><li>VRAM 80% — 30 минут.</li><li>Реальная игра или рабочая нагрузка — 20–30 минут.</li></ol>
+          <p>Этот расширенный профиль пока служит отдельным протоколом: итоговый мастер ниже оценивает только Purchase Screen. Не называй Purchase Screen результатом Maximum.</p>
+        </article>
+      </div>
+
+      <div class="license-grid" aria-label="Возможности редакций OCCT">
+        <article><b>Personal Free</b><p>Бесплатно для личного некоммерческого использования. Все этапы настраиваются и запускаются вручную.</p></article>
+        <article><b>Personal Supporter</b><p>Сертификаты, отчёты, отсутствие ожидания и ограничений длительности. Официальный Silver запускается как готовый профиль.</p></article>
+        <article><b>Enterprise</b><p>Поддерживаемые CLI, расписания и машинные отчёты. Только этот путь позволяет автоматизировать OCCT без управления GUI.</p></article>
+      </div>
+
+      <aside class="power-gate" role="note">
+        <h3>OCCT Power — опциональный ручной этап</h3>
+        <p>Запускай только после идентификации модели, мощности, кабелей и разъёмов БП: сначала <b>2 минуты</b>, затем <b>10 минут</b>, и только при полной стабильности — <b>20–30 минут</b>. Всё время оставайся рядом; не оставляй Power без наблюдения. Немедленно Stop при black screen, перезагрузке, запахе, треске, ошибках или резком росте температур.</p>
+        <p>Мы ставим Power последним как более осторожное отклонение от рекомендации OCCT запускать его первым. Успешный Power <b>не доказывает исправность БП</b>: программа не измеряет ripple, hold-up time и работу защит.</p>
+      </aside>
+    </section>
+
     <section id="route" class="section route" aria-labelledby="route-title">
       <div class="route-head">
-        <div><p class="eyebrow light">Шаги 01–04 · на встрече</p><h2 id="route-title">Иди сверху вниз.<br>Не перескакивай.</h2></div>
-        <div class="timer"><span>Ориентир</span><strong>35–45</strong><b>минут или дольше</b></div>
+        <div><p class="eyebrow light">On-site Screen · до оплаты</p><h2 id="route-title">Иди сверху вниз.<br>Не задерживай сделку.</h2></div>
+        <div class="timer"><span>Лимит на месте</span><strong>25–30</strong><b>минут</b></div>
       </div>
+
+      <p class="route-proof-rule"><b>Правило доказательств:</b> после «Пройдено» или «Торг» обязательно впиши в заметку числа, имя файла/скриншота или конкретное наблюдение. Пустая заметка автоматически считается «Не проверено» в итоговом отчёте.</p>
 
       <ol class="route-list">
         <li data-check="inspection" data-check-title="Осмотр до включения">
@@ -181,26 +233,44 @@
           <div class="check-entry"><div class="status-controls" aria-label="Результат осмотра"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Что увидел и какие фото сделал"></textarea></label></div>
         </li>
         <li data-check="components" data-check-title="Состав компьютера">
-          <div class="route-time">5–10 мин</div>
+          <div class="route-time">5–9 мин</div>
           <div class="route-copy"><h3>Сверка состава</h3><p>CPU-Z: CPU, Mainboard, Memory, по очереди каждый Slot в SPD. GPU-Z: название, Memory Size и Bus Interface; нажми «?» и запусти Render Test — шина должна перейти из режима простоя. Открой Диспетчер устройств: жёлтый восклицательный знак означает проблему — открой свойства устройства и запиши код.</p><p class="trade"><b>Торг:</b> одна планка RAM при честно заявленном общем объёме или другой заранее оговорённый недорогой компонент. <b>Стоп:</b> модель CPU/GPU/платы, VRAM, объём RAM или накопителя не совпадают с объявлением — сначала продавец должен объяснить расхождение и пересчитать цену.</p></div>
           <div class="evidence"><span>Доказательство</span><b>6 скриншотов</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат сверки состава"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="CPU, GPU, RAM и отличия от объявления"></textarea></label></div>
         </li>
         <li data-check="storage" data-check-title="Накопители и SMART">
-          <div class="route-time">10–15 мин</div>
+          <div class="route-time">9–13 мин</div>
           <div class="route-copy"><h3>Каждый накопитель</h3><p>В CrystalDiskInfo переключи диски стрелками. Сними Health Status, температуру, часы и SMART. Уточни, какой диск входит в продажу.</p><p class="stop"><b>Стоп:</b> Bad, пропадающий диск или у HDD значения 05, C5 либо C6 больше нуля. <b>Торг только с ценой немедленной замены:</b> Caution из-за малого остатка ресурса SSD. <b>Не проверено:</b> Unknown, USB или RAID требуют отдельной диагностики и не считаются чистым результатом. Good тоже не гарантирует будущую исправность.</p></div>
           <div class="evidence"><span>Доказательство</span><b>1 кадр на диск</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат проверки дисков"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Модели, Health, часы и важные SMART"></textarea></label></div>
         </li>
-        <li data-check="load" data-check-title="Контролируемая нагрузка">
-          <div class="route-time">15–32 мин</div>
-          <div class="route-copy"><h3>Короткая контролируемая нагрузка</h3><p><b>До Start:</b> спроси согласие продавца, закрой игры, запусти HWiNFO Sensors. Запиши часы и минуты начала в заметке ниже и проверь, есть ли уже события WHEA-Logger — журнал не очищай. UAC требует действия человека у ПК: сверь Verified publisher. В OCCT Personal закрой окно поддержки только после обратного отсчёта. Сначала найди кнопку <b>Stop</b>, покажи её продавцу и лишь затем нажимай <b>Start</b>. Время теста считай после фактического старта нагрузки, а не во время countdown.</p><p><b>На ПК, который покупаешь:</b> OCCT <b>3D Adaptive → Variable → 15%–100%, шаг +5% каждые 20 секунд, 7 минут</b>. Так тест достигает 100%, но проходит и промежуточные режимы, где современная GPU тоже может ошибаться. Затем CPU в обычном Variable-режиме 5 минут и Memory 5 минут. <b>Не запускай Power</b>: он одновременно нагружает CPU и GPU, для короткой проверки избыточен и не доказывает качество БП. <a href="https://www.ocbase.com/news/occt-gpu-stress-testing-modern-adaptive-approach" target="_blank" rel="noopener noreferrer">Почему OCCT рекомендует переменную 3D-нагрузку ↗</a></p><p>Запиши отдельно <b>GPU Core</b>, <b>GPU Hot Spot</b> и <b>GPU Memory / VRAM</b>. Не существует единого универсального температурного порога: сверь точную модель, динамику, ошибки и throttling.</p><p class="stop"><b>Нажми Stop немедленно</b> при артефактах, ошибке, запахе, BSOD или ребуте. Если Stop не срабатывает в удалённом интерфейсе, продавец должен остановить тест локально; не начинай следующий тест.</p><p class="thermal-note"><b>Если Hot Spot настораживает:</b> сначала проверь пыль. Чистить можно только на выключенном ПК и с согласия продавца. После безопасной очистки повтори тот же тест с теми же настройками → проверь обдув и воздушный поток корпуса → закладывай диагностику и обслуживание в сервисе. Если чистить на встрече нельзя, не продолжай нагрузку: фиксируй «Стоп» или стоимость сервиса. Параметр fan curve не меняй в BIOS или GCC и не подгоняй результат на чужом ПК.</p><p class="stop"><b>Стоп:</b> устойчивый Thermal Throttling на штатных настройках. Power/Current Limit сам по себе не означает перегрев.</p></div>
-          <div class="evidence"><span>Доказательство</span><b>OCCT Adaptive + HWiNFO Max</b></div>
-          <div class="check-entry"><div class="status-controls" aria-label="Результат нагрузки"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Время старта · Core / Hot Spot / VRAM · ошибки · длительность"></textarea></label></div>
+        <li data-check="cpu" data-check-title="CPU и CPU+RAM">
+          <div class="route-time">13–18 мин</div>
+          <div class="route-copy"><h3>Короткий CPU-отсев</h3><p><b>До Start:</b> получи согласие продавца, открой HWiNFO Sensors и запиши baseline WHEA — журнал не очищай. В OCCT дождись countdown, сначала найди <b>Stop</b>, затем нажми <b>Start</b>. Для On-site Screen запусти CPU-only 3 минуты, затем CPU+RAM Large 2 минуты. Это только быстрый отсев, не доказательство полной стабильности.</p><p class="stop"><b>Нажми Stop немедленно</b> при ошибке OCCT, новом WHEA, BSOD, зависании, перезагрузке, запахе, треске или продолжающемся росте температуры у аппаратного лимита.</p></div>
+          <div class="evidence"><span>Доказательство</span><b>2 итога OCCT + HWiNFO Max</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат CPU и CPU RAM"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Настройки · время · ошибки · CPU Package · частоты"></textarea></label></div>
         </li>
-        <li data-check="ports" data-check-title="Порты и WHEA">
-          <div class="route-time">32–35 мин</div>
-          <div class="route-copy"><h3>Порты и финальная сверка</h3><p>Проверь USB флешкой, звук, Ethernet/Wi‑Fi и заявленные видеовыходы. Затем: Просмотр событий → Журналы Windows → Система → Фильтр текущего журнала → источник <b>WHEA-Logger</b>. Журнал не очищай: сравни время событий с записанным временем старта теста.</p><p class="stop"><b>Стоп:</b> новые WHEA-Logger события в интервале твоего теста. Старые записи за другую дату — контекст, но не результат текущей проверки.</p><p class="trade"><b>Торг:</b> неработающий вторичный порт, шумный вентилятор, слабая батарейка CMOS. Неисправный основной видеовыход или сетевой адаптер — только если готов ремонтировать.</p></div>
+        <li data-check="memory" data-check-title="Оперативная память">
+          <div class="route-time">18–21 мин</div>
+          <div class="route-copy"><h3>Короткая память</h3><p>Используй <b>80% свободной памяти</b>, а не 80% установленного объёма. Выбери preset с блоками <b>Check</b> и запусти 3 минуты. Windows-тест не охватывает занятую ОС память; полноценная проверка RAM остаётся домашним этапом MemTest86/OCCT.</p><p class="stop"><b>Стоп:</b> любая ошибка.</p></div>
+          <div class="evidence"><span>Доказательство</span><b>Preset + объём + итог</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат памяти"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Preset · свободная память · ошибки · длительность"></textarea></label></div>
+        </li>
+        <li data-check="gpu" data-check-title="GPU 3D Adaptive">
+          <div class="route-time">21–26 мин</div>
+          <div class="route-copy"><h3>Короткий GPU-отсев</h3><p>OCCT <b>3D Adaptive → Variable → 15%–100%</b> на 5 минут, затем проверь <b>GPU Core</b>, <b>GPU Hot Spot</b> и <b>GPU Memory / VRAM</b> в HWiNFO. Промежуточные режимы полезны, но 5 минут не заменяют домашние 30 минут. Нет универсального температурного порога: сверяйся с лимитом конкретной модели и ищи троттлинг. Артефакт, driver reset или потеря изображения — немедленный STOP.</p><p class="thermal-note"><b>Если Hot Spot настораживает:</b> сначала проверь пыль → повтори тот же тест дома → проверь обдув и воздушный поток → заложи обслуживание. Не меняй fan curve, GCC или BIOS-настройки на встрече.</p></div>
+          <div class="evidence"><span>Доказательство</span><b>OCCT Adaptive + HWiNFO Max</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат GPU"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Core · Hot Spot · VRAM · частоты · ошибки"></textarea></label></div>
+        </li>
+        <li data-check="vram" data-check-title="Видеопамять VRAM">
+          <div class="route-time">26–28 мин</div>
+          <div class="route-copy"><h3>VRAM и изображение</h3><p>Запусти VRAM на 2 минуты или выполни визуальный Render Test GPU-Z. Это быстрый отсев; домашний VRAM-тест — 15 минут.</p><p class="stop"><b>Стоп:</b> любая ошибка VRAM, артефакт, потеря изображения, driver reset, зависание или перезагрузка.</p></div>
+          <div class="evidence"><span>Доказательство</span><b>VRAM 80% + итог</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат VRAM"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Объём теста · ошибки · артефакты · длительность"></textarea></label></div>
+        </li>
+        <li data-check="ports" data-check-title="Порты и системные события">
+          <div class="route-time">28–30 мин</div>
+          <div class="route-copy"><h3>Порты и финальная сверка</h3><p>Проверь USB флешкой, звук, Ethernet/Wi‑Fi и заявленные видеовыходы. Затем открой сохранённый скриптом post-check: новые <b>WHEA, BugCheck, Kernel-Power 41, Display 4101, disk, stornvme или storahci</b> сравниваются только с временем этого теста. Журнал не очищай. Повторно открой CrystalDiskInfo и сверь каждый диск после нагрузки.</p><p class="stop"><b>Стоп:</b> новое критичное системное событие, новый SMART/media error, пропавший диск или ошибка повторной диагностики. Старые записи за другую дату — контекст, но не результат текущей проверки.</p><p class="trade"><b>Торг:</b> неработающий вторичный порт, шумный вентилятор, слабая батарейка CMOS. Неисправный основной видеовыход или сетевой адаптер — только если готов ремонтировать.</p></div>
           <div class="evidence"><span>Доказательство</span><b>Фото портов + итог</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат проверки портов"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Порты, сеть, звук и новые WHEA"></textarea></label></div>
         </li>
@@ -210,7 +280,7 @@
     <section id="decision" class="section decision" aria-labelledby="decision-title">
       <div class="section-intro compact">
         <div><p class="eyebrow">Шаг 05 · решение</p><h2 id="decision-title">Не гадай.<br>Сверь результат.</h2></div>
-        <p>Короткий тест означает только «явных проблем не найдено». Он не даёт гарантии и программами нельзя доказать исправность блока питания.</p>
+        <p>On-site Screen означает только «в коротком протоколе явных проблем не обнаружено». Он не даёт гарантии; полный 90–120-минутный протокол пройди дома. Программами нельзя доказать исправность блока питания.</p>
       </div>
       <div class="live-verdict" data-verdict-output="unverified" aria-live="polite">
         <span>Текущий итог</span><strong data-verdict-label>НЕ ПРОВЕРЕНО</strong><p data-verdict-reason>Отметь результат каждого шага. Непроверенный пункт не считается успешным.</p>

@@ -107,11 +107,20 @@ test("builds a fail-closed guided session that installs and opens official tools
     assert.match(command, new RegExp(id.replaceAll(".", "\\.")));
   }
   assert.match(command, /winget\s+install/i);
+  assert.match(command, /winget\s+export[\s\S]{0,180}--include-versions/i);
+  assert.match(command, /Existing\.Version\s+-ceq\s+\$Version/i);
+  assert.match(command, /install\s+--id[^;]*--version/i);
+  assert.match(command, /VerifiedPackage\.Version\s+-cne\s+\$Package\.Version/i);
   assert.match(command, /--exact/i);
   assert.match(command, /--source\s+winget/i);
   assert.match(command, /--silent/i);
   assert.match(command, /source\s+export/i);
   assert.match(command, /Microsoft\.Winget\.Source_8wekyb3d8bbwe/i);
+  assert.match(command, /Get-AppxPackage\s+-Name\s+Microsoft\.DesktopAppInstaller/i);
+  assert.match(command, /PublisherId\s+-ne\s+'8wekyb3d8bbwe'/i);
+  assert.match(command, /SignatureKind\s+-ne\s+'Store'/i);
+  assert.match(command, /Status\s+-ne\s+'Ok'/i);
+  assert.match(command, /\[string\]::Equals\(\$Winget,\$ExpectedWinget/i);
   assert.match(command, /Get-AuthenticodeSignature/i);
   assert.match(command, /Start-Process/i);
   assert.match(command, /Microsoft-Windows-WHEA-Logger/i);
@@ -120,9 +129,46 @@ test("builds a fail-closed guided session that installs and opens official tools
   assert.match(command, /Disk|stornvme|storahci/i);
   assert.match(command, /BASELINE|baseline/i);
   assert.match(command, /INCOMPLETE/i);
-  assert.match(command, /CPU-Z[^;]{0,300}-txt=/i);
-  assert.match(command, /CrystalDiskInfo[^;]{0,300}\/CopyExit/i);
-  assert.match(command, /OCCT[^;]{0,300}Start-Process/i);
+  assert.match(command, /CPU-Z-report/i);
+  assert.match(command, /ArgumentList\s*\(\s*'-txt='/i);
+  assert.match(command, /ArgumentList\s*'\/CopyExit'/i);
+  assert.match(command, /\$OcctProcess=Start-Process -FilePath \$Occt/i);
+  assert.match(command, /PC_CHECK_SAFE_MODE/i);
+  assert.match(command, /SAFE MODE: интерфейсы и нагрузка не запускались/i);
+  assert.match(command, /CPU-Z не создал свежий отчёт/i);
+  assert.match(command, /CPU-Z завис и не был остановлен/i);
+  assert.match(command, /CrystalDiskInfo не создал свежий DiskInfo\.txt/i);
+  assert.match(command, /CrystalDiskInfo завис и не был остановлен/i);
+  assert.match(command, /CrystalDiskInfo post-check завис и не был остановлен/i);
+  assert.match(command, /\$Unavailable=@\(\)/i);
+  assert.match(
+    command,
+    /CPUID\.CPU-Z[\s\S]{0,320}\$Unavailable\+=[\s\S]{0,220}continue/i,
+    "an unreachable CPU-Z publisher must degrade to a visible fallback",
+  );
+  assert.match(command, /CPU-Z недоступен[\s\S]{0,220}HWiNFO Summary/i);
+  assert.match(command, /CPUID\.CPU-Z'\)\{30000\}else\{300000\}/i);
+  assert.doesNotMatch(command, /CurrentVersion\\Uninstall|Get-Command\s+\$Name/i);
+  assert.match(command, /Microsoft\\WinGet\\Packages/i);
+  assert.match(command, /GetNameInfo\([^;]*SimpleName/i);
+  assert.match(command, /-cne\s+\$ExpectedPublisher/i);
+  assert.match(command, /FileVersion[\s\S]{0,160}StartsWith/i);
+  assert.match(command, /Killer\.ExitCode[\s\S]*Process\.HasExited[\s\S]*Process\.Kill\s*\(/i);
+  assert.match(command, /Get-WinEvent[\s\S]{0,220}-ErrorAction\s+Stop/i);
+  assert.match(command, /NoMatchingEventsFound[\s\S]{0,120}return\s+@\(\)[\s\S]{0,120}throw/i);
+  assert.match(command, /ConvertTo-Json\s+-InputObject\s+\$Baseline/i);
+  assert.match(command, /ConvertTo-Json\s+-InputObject\s+\$Post/i);
+  assert.ok((command.match(/ArgumentList\s*'\/CopyExit'/gi) || []).length >= 2);
+  assert.match(command, /CrystalDiskInfo-post\.txt/i);
+  assert.match(command, /Get-StorageReliabilityCounter/i);
+  assert.match(command, /storage-baseline\.json/i);
+  assert.match(command, /storage-post\.json/i);
+  assert.match(command, /Kernel-Power'[\s\S]{0,100}41/i);
+  assert.match(command, /Display'[\s\S]{0,100}4101/i);
+  assert.match(command, /STOP-SYSTEM-EVENTS\.txt/i);
+  assert.match(command, /STOP-STORAGE\.txt/i);
+  assert.match(command, /\$MissingDisks=@\([\s\S]{0,220}StorageAfter\.DeviceId\s+-notcontains/i);
+  assert.match(command, /catch[\s\S]*INCOMPLETE[\s\S]*ERROR\.txt/i);
   assert.doesNotMatch(command, /ignore-security-hash|--force|ExecutionPolicy\s+Bypass/i);
   assert.doesNotMatch(command, /SendKeys|AutoHotkey|pywinauto|UIAutomation/i);
   assert.doesNotMatch(command, /(?:OCCT|occt)[^;]{0,200}(?:Power|3D\s+Adaptive|VRAM)[^;]{0,100}(?:--|\/run|Start)/i);
@@ -348,6 +394,21 @@ test("computes a live verdict with stop as the highest-risk state", () => {
   assert.equal(computeVerdict(["stop", "unverified", "caution"]), "stop");
 });
 
+test("keeps pass and caution unverified until evidence is described", () => {
+  const functionSource = script.match(
+    /function effectiveStatus\(check = \{\}\) \{([\s\S]*?)\n  \}/,
+  );
+  assert.ok(functionSource, "effectiveStatus must remain extractable");
+  const effectiveStatus = vm.runInNewContext(
+    `(function effectiveStatus(check = {}) { const supportedStatuses = ["stop", "unverified", "caution", "pass"]; function cleanStatus(value) { return supportedStatuses.includes(value) ? value : null; }${functionSource[1]}\n})`,
+  );
+  assert.equal(effectiveStatus({ status: "pass", note: "" }), "unverified");
+  assert.equal(effectiveStatus({ status: "caution", note: "   " }), "unverified");
+  assert.equal(effectiveStatus({ status: "pass", note: "OCCT 0 errors" }), "pass");
+  assert.equal(effectiveStatus({ status: "stop", note: "" }), "stop");
+  assertPattern(html, /Пустая заметка[^.<]{0,100}(?:Не проверено|«Не проверено»)/i);
+});
+
 test("can copy and print a report containing statuses and the verdict", () => {
   assertPattern(html, /\bdata-action=["']copy-report["']/i);
   assertPattern(html, /\bdata-action=["']print-report["']/i);
@@ -360,6 +421,9 @@ test("can copy and print a report containing statuses and the verdict", () => {
   );
   assertPattern(script, /verdict/i, "the report must include the computed verdict");
   assertPattern(script, /status/i, "the report must include individual statuses");
+  assertPattern(script, /caution:\s*["']Есть оценимый недостаток/i);
+  assertPattern(script, /stop:\s*["']Обнаружен стоп-фактор/i);
+  assertPattern(script, /unverified:\s*["']Положительный результат не сформирован/i);
 });
 
 test("labels and links portable packages without disguising installers", () => {
@@ -412,18 +476,18 @@ test("walks a novice through the OCCT support countdown and emergency Stop", () 
   );
 });
 
-test("defines a 90-to-120-minute purchase screen with separate CPU, memory, GPU, and VRAM stages", () => {
-  const load = sliceBetween(html, 'id="test-profiles"', 'data-check="ports"');
-  assertPattern(load, /(?:90[–-]120|90\s*[-–]\s*120)[^<]{0,40}мин/i);
+test("defines a 25-to-30-minute on-site screen with separate quick checks", () => {
+  const load = sliceBetween(html, 'id="route"', 'id="decision"');
+  assertPattern(load, /(?:25[–-]30|25\s*[-–]\s*30)[^\n]{0,80}(?:минут|мин)/i);
   assertPattern(load, /CPU-only|CPU отдельно/i);
   assertPattern(load, /CPU\+RAM|CPU и RAM/i);
-  assertPattern(load, /Memory[^<]{0,120}15\s*мин/i);
+  assertPattern(load, /Memory|памят/i);
   assertPattern(load, /3D\s+Adaptive/i);
   assertPattern(load, /Variable/i);
   assertPattern(load, /15\s*%[^<]{0,100}100\s*%/i);
-  assertPattern(load, /\+?5\s*%[^<]{0,80}(?:минут|мин)/i);
-  assertPattern(load, /3D[\s\S]{0,300}30\s*мин/i);
-  assertPattern(load, /VRAM[^<]{0,120}80\s*%[^<]{0,120}15\s*мин/i);
+  assertPattern(load, /(?:5\s*мин|5\s*минут)/i);
+  assertPattern(load, /VRAM/i);
+  assertPattern(html, /HOME\s+SCREEN[^<]{0,80}90[–-]120\s*МИН/i);
 });
 
 test("defines a maximum 8-to-12-plus-hour profile without claiming one-click automation", () => {
@@ -457,13 +521,14 @@ test("separates GPU core, hotspot, and memory and orders thermal remediation", (
     "temperature verdicts must be model-specific",
   );
 
-  const dust = indexOfAny(html, [/пыл/i, /dust/i]);
-  const sameRetest = indexOfAny(html, [
+  const thermalNote = sliceBetween(html, '<p class="thermal-note"', '</p>');
+  const dust = indexOfAny(thermalNote, [/пыл/i, /dust/i]);
+  const sameRetest = indexOfAny(thermalNote, [
     /повтор(?:и|ить|яем|ить снова)?\s+(?:тот же|такой же)\s+тест/i,
     /repeat\s+the\s+same\s+test/i,
   ]);
-  const airflow = indexOfAny(html, [/airflow/i, /обдув/i, /воздуш\w* поток/i]);
-  const service = indexOfAny(html, [/сервис/i, /обслужив/i, /service/i]);
+  const airflow = indexOfAny(thermalNote, [/airflow/i, /обдув/i, /воздуш\w* поток/i]);
+  const service = indexOfAny(thermalNote, [/сервис/i, /обслужив/i, /service/i]);
   assert.ok(
     dust >= 0 && dust < sameRetest && sameRetest < airflow && airflow < service,
     `expected dust -> same retest -> airflow -> service, got ${[

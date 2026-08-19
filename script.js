@@ -10,10 +10,10 @@
     unverified: "НЕ ПРОВЕРЕНО",
   };
   const verdictReasons = {
-    pass: "Все пять шагов отмечены как пройденные. Это снижает риск, но не даёт гарантии.",
+      pass: "Все обязательные этапы On-site Screen отмечены как пройденные. Явных проблем в коротком протоколе не обнаружено; это не гарантия будущей исправности.",
     caution: "Есть оценимый недостаток. Зафиксируй стоимость устранения до оплаты.",
     stop: "Есть стоп-фактор. Не продолжай сделку, пока причина не устранена и не проверена повторно.",
-    unverified: "Хотя бы один обязательный шаг не проверен. Такой пункт нельзя считать успешным.",
+    unverified: "Хотя бы один обязательный шаг не проверен или для «Пройдено / Торг» не записано доказательство. Такой пункт нельзя считать успешным.",
   };
 
   const checkElements = [...document.querySelectorAll("[data-check]")];
@@ -27,12 +27,21 @@
   const driveInput = document.querySelector("[data-usb-drive]");
   const autocheckPreview = document.querySelector("[data-autocheck-command-preview]");
   const usbPreview = document.querySelector("[data-usb-command-preview]");
+  const guidedPreview = document.querySelector("[data-guided-command-preview]");
 
   const emptyState = () => ({ claims: {}, checks: {} });
   let state = emptyState();
 
   function cleanStatus(value) {
     return supportedStatuses.includes(value) ? value : null;
+  }
+
+  function effectiveStatus(check = {}) {
+    const status = cleanStatus(check.status) || "unverified";
+    if ((status === "pass" || status === "caution") && !String(check.note || "").trim()) {
+      return "unverified";
+    }
+    return status;
   }
 
   function readState() {
@@ -58,8 +67,7 @@
 
   function normalizedStatuses() {
     return checkElements.map((element) => {
-      const saved = state.checks[element.dataset.check];
-      return cleanStatus(saved?.status) || "unverified";
+      return effectiveStatus(state.checks[element.dataset.check]);
     });
   }
 
@@ -149,7 +157,7 @@
 
     for (const element of checkElements) {
       const check = state.checks[element.dataset.check] || {};
-      const status = cleanStatus(check.status) || "unverified";
+      const status = effectiveStatus(check);
       const title = element.dataset.checkTitle || element.dataset.check;
       lines.push(`- ${title}: ${statusLabels[status]}`);
       if (String(check.note || "").trim()) lines.push(`  Заметка: ${String(check.note).trim()}`);
@@ -157,7 +165,13 @@
 
     const verdict = computeVerdict();
     lines.push("", `ИТОГ: ${statusLabels[verdict]}`, verdictReasons[verdict]);
-    lines.push("", "Короткая проверка не является гарантией. Физические проверки выполняет покупатель.");
+    const reportConclusion = {
+      pass: "В On-site Screen явных проблем не обнаружено — это не гарантия будущей исправности.",
+      caution: "Есть оценимый недостаток: зафиксируй его и стоимость устранения до оплаты.",
+      stop: "Обнаружен стоп-фактор: не продолжай сделку до устранения причины и повторной проверки.",
+      unverified: "Положительный результат не сформирован: заверши недостающие проверки и доказательства.",
+    }[verdict];
+    lines.push("", reportConclusion, "Физические проверки выполняет покупатель.");
     return lines.join("\n");
   }
 
@@ -187,6 +201,7 @@
   function renderCommandPreviews() {
     if (!window.PcCheckCommands) return;
     if (autocheckPreview) autocheckPreview.value = window.PcCheckCommands.buildAutocheckCommand();
+    if (guidedPreview) guidedPreview.value = window.PcCheckCommands.buildGuidedSessionCommand();
     if (usbPreview) {
       try {
         usbPreview.value = window.PcCheckCommands.buildUsbPrepCommand(driveInput?.value);
@@ -210,6 +225,20 @@
     } catch (error) {
       setAutomationFeedback(error instanceof Error ? error.message : "Проверь букву флешки.");
     }
+  }
+
+  async function copyGuidedCommand() {
+    if (!window.PcCheckCommands) {
+      setAutomationFeedback("Команда не загрузилась. Обнови страницу и попробуй снова.");
+      return;
+    }
+    const command = window.PcCheckCommands.buildGuidedSessionCommand();
+    await copyText(
+      command,
+      "Скопировано. Win+X → Терминал → вставь → Enter. Подтверди UAC только для проверенного издателя.",
+      "Не удалось скопировать. Разреши доступ к буферу обмена и повтори.",
+      automationFeedback,
+    );
   }
 
   function resetProgress() {
@@ -260,6 +289,7 @@
   document.querySelector('[data-action="copy-report"]')?.addEventListener("click", copyReport);
   document.querySelector('[data-action="copy-autocheck-command"]')?.addEventListener("click", copyAutocheckCommand);
   document.querySelector('[data-action="copy-usb-command"]')?.addEventListener("click", copyUsbCommand);
+  document.querySelector('[data-action="copy-guided-command"]')?.addEventListener("click", copyGuidedCommand);
   driveInput?.addEventListener?.("input", renderCommandPreviews);
   document.querySelector('[data-action="print-report"]')?.addEventListener("click", () => {
     if (reportPreview) reportPreview.textContent = buildReport();
