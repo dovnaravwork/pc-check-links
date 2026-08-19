@@ -6,6 +6,7 @@
   <meta name="description" content="Пошаговая проверка подержанного Windows-ПК: официальные инструменты, контролируемая нагрузка, доказательства и решение покупать или нет.">
   <title>Проверка б/у ПК — маршрут покупателя</title>
   <link rel="stylesheet" href="style.css">
+  <script src="commands.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -13,6 +14,7 @@
   <header class="topbar">
     <a class="brand" href="#top" aria-label="К началу страницы"><span>PC</span> CHECK / FIELD GUIDE</a>
     <nav aria-label="Разделы страницы">
+      <a href="#automation">Автоматизация</a>
       <a href="#downloads">Инструменты</a>
       <a href="#session">Проверка</a>
       <a href="#route">Маршрут</a>
@@ -27,8 +29,8 @@
         <h1 id="hero-title">Не покупай<br>железо <em>на словах.</em></h1>
         <p class="lead">Маршрут примерно на 35–45 минут для новичка: скачать только у авторов, сверить комплектующие, провести короткую контролируемую нагрузку и уйти с доказательствами. Если что-то задерживает — не торопись.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#downloads">1. Подготовить флешку <span aria-hidden="true">→</span></a>
-          <a class="button ghost" href="#route">Уже на встрече</a>
+          <a class="button primary" href="#automation">Автопроверка в 1 команду <span aria-hidden="true">→</span></a>
+          <a class="button ghost" href="#downloads">Подготовить флешку</a>
         </div>
       </div>
       <aside class="brief" aria-label="Главное правило проверки">
@@ -47,13 +49,49 @@
       <span><b>05</b> Решение</span>
     </section>
 
+    <section id="automation" class="section automation" aria-labelledby="automation-title">
+      <div class="section-intro compact">
+        <div><p class="eyebrow">Минимум кликов</p><h2 id="automation-title">Скопируй.<br>Вставь. Получи отчёт.</h2></div>
+        <p>Открой сайт на проверяемом ПК → нажми кнопку → <b>Win+X → Терминал</b> → вставь команду → Enter. Команда видима на этой странице, не требует администратора и не отключает защиту.</p>
+      </div>
+
+      <div class="automation-grid">
+        <article class="automation-card featured">
+          <span class="automation-number">01 · НА ВСТРЕЧЕ</span>
+          <h3>Автопроверка Windows</h3>
+          <p>За 1–2 минуты собирает CPU, GPU, RAM, состояние дисков, проблемные устройства, WHEA и статус Defender. Сохраняет JSON и открывает понятную сводку на рабочем столе.</p>
+          <button class="button dark" type="button" data-action="copy-autocheck-command">Скопировать автопроверку</button>
+          <ul>
+            <li>Работает локально и ничего не скачивает.</li>
+            <li>Не меняет VPN, Defender или настройки Windows.</li>
+            <li>Не запускает нагрузку и не выдаёт неполную проверку за окончательную.</li>
+          </ul>
+        </article>
+
+        <article class="automation-card">
+          <span class="automation-number">00 · ДО ВСТРЕЧИ</span>
+          <h3>Вся флешка одной командой</h3>
+          <p>Укажи букву флешки. WinGet скачает пять диагностических пакетов, проверит их по manifest-хэшам, создаст SHA-256 список и попросит Defender проверить папку. Ничего не устанавливается и не запускается.</p>
+          <label class="drive-field"><span>Буква флешки</span><input type="text" value="E:" maxlength="2" inputmode="text" autocomplete="off" spellcheck="false" data-usb-drive aria-describedby="drive-help"></label>
+          <button class="button outline" type="button" data-action="copy-usb-command">Скопировать команду для флешки</button>
+          <p id="drive-help" class="automation-help">Если флешка отображается как F:, замени E: на F:. Команда создаёт только папку <b>PC-Check</b> и ничего не удаляет.</p>
+        </article>
+      </div>
+      <p class="automation-feedback" data-automation-feedback aria-live="polite"></p>
+      <details class="automation-details">
+        <summary>Почему не запускается полный тест одной кнопкой?</summary>
+        <p>Автосбор безопасно сокращает рутину, но человек должен увидеть наклейку БП, артефакты, запах, шум и иметь возможность нажать Stop. Поэтому нагрузка до 100% запускается отдельно, только с согласия продавца и под наблюдением.</p>
+      </details>
+      <noscript><p class="noscript-note">JavaScript выключен: кнопки копирования не работают. Включи JavaScript или используй ручные шаги ниже.</p></noscript>
+    </section>
+
     <section id="downloads" class="section downloads" aria-labelledby="downloads-title">
       <div class="section-intro">
         <div>
           <p class="eyebrow">Шаг 00 · дома</p>
           <h2 id="downloads-title">Собери флешку<br>до встречи</h2>
         </div>
-        <p>Возьми обычную флешку на <b>8 ГБ или больше</b>: этого достаточно для portable-утилит, их архивов, manifest, скриншотов и итогового отчёта. Все кнопки ведут на сайты разработчиков или указанные ими площадки. Этот сайт не хранит и не раздаёт программы.</p>
+        <p>Возьми обычную флешку на <b>8 ГБ или больше</b>. Быстрее всего — скопировать команду выше: WinGet скачивает установочные/portable-файлы из зарегистрированного каталога без их установки. Ручные официальные ссылки ниже остаются запасным вариантом.</p>
       </div>
 
       <div class="download-alert" role="note" aria-labelledby="cpuz-alert-title">

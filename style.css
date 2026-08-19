@@ -62,6 +62,24 @@ h1 em { color: var(--lime); font-style: normal; }
 .section-intro h2, .route-head h2, .evidence-pack h2 { margin: 0; font-size: clamp(40px, 6vw, 70px); line-height: .92; letter-spacing: -.06em; text-wrap: balance; }
 .section-intro > p { margin: 0 0 4px; color: var(--muted); font-size: 16px; line-height: 1.6; text-wrap: pretty; }
 
+.automation { scroll-margin-top: 10px; }
+.automation-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); background: var(--surface); }
+.automation-card { min-height: 430px; padding: 34px; display: flex; flex-direction: column; align-items: flex-start; }
+.automation-card + .automation-card { border-left: 1px solid var(--line); }
+.automation-card.featured { background: var(--lime); }
+.automation-number { margin-bottom: 34px; color: var(--muted); font: 800 11px/1.2 ui-monospace, monospace; letter-spacing: .1em; }
+.automation-card h3 { margin-bottom: 14px; font-size: 32px; letter-spacing: -.045em; }
+.automation-card > p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+.automation-card .button { margin-top: 8px; }
+.automation-card ul { margin: auto 0 0; padding: 24px 0 0 18px; color: var(--muted); font-size: 13px; line-height: 1.65; }
+.drive-field { width: 100%; margin: 8px 0 10px; display: grid; grid-template-columns: 140px 90px; align-items: center; gap: 12px; color: var(--muted); font: 700 12px/1.3 ui-monospace, monospace; }
+.drive-field input { font: 800 18px/1 ui-monospace, monospace; text-transform: uppercase; }
+.automation-help { margin: 18px 0 0; font-size: 12px !important; }
+.automation-feedback { min-height: 24px; margin: 12px 0 0; color: var(--ink); font-weight: 800; }
+.automation-details { margin-top: 12px; padding: 18px 20px; border: 1px solid var(--line); background: var(--surface); }
+.automation-details summary { min-height: 32px; font-weight: 800; cursor: pointer; }
+.automation-details p { max-width: 850px; margin: 10px 0 0; color: var(--muted); line-height: 1.6; }
+
 .download-alert { margin-bottom: 18px; padding: 26px; display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; align-items: center; gap: 22px; border: 1px solid #d2aa3c; background: #fff2c8; }
 .alert-mark { width: 46px; height: 46px; display: grid; place-items: center; border: 2px solid var(--ink); border-radius: 50%; font: 900 24px/1 ui-monospace, monospace; }
 .alert-kicker { margin-bottom: 5px; color: #755800; font: 800 11px/1.2 ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; }
@@ -185,6 +203,12 @@ footer p { max-width: 560px; margin: 0; }
   .claim-grid { grid-template-columns: 1fr; }
   .claim-wide { grid-column: 1; }
   .section-intro h2, .route-head h2, .evidence-pack h2 { font-size: 42px; }
+  .automation-grid { grid-template-columns: 1fr; }
+  .automation-card { min-height: 0; padding: 26px 22px; }
+  .automation-card + .automation-card { border-left: 0; border-top: 1px solid var(--line); }
+  .automation-card .button { width: 100%; }
+  .automation-card ul { margin-top: 20px; }
+  .drive-field { grid-template-columns: 1fr 80px; }
   .download-alert { padding: 21px; grid-template-columns: 1fr; }
   .download-alert .button { width: 100%; }
   .tool-row { padding: 24px 6px; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; }
@@ -218,7 +242,7 @@ footer p { max-width: 560px; margin: 0; }
   :root { --paper: #fff; --surface: #fff; --ink: #000; --muted: #333; --line: #aaa; }
   @page { margin: 14mm; }
   body { background: #fff; color: #000; font-size: 10pt; }
-  .topbar, .hero, .quick-strip, .downloads, .session .section-intro, .noscript-note, .route-head, .route-copy, .status-controls, .decision-grid, .report-actions, .evidence-pack, footer { display: none !important; }
+  .topbar, .hero, .quick-strip, .automation, .downloads, .session .section-intro, .noscript-note, .route-head, .route-copy, .status-controls, .decision-grid, .report-actions, .evidence-pack, footer { display: none !important; }
   main { max-width: none; padding: 0; }
   .section { padding: 0; }
   .session { display: block; margin-bottom: 8mm; }

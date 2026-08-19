@@ -23,6 +23,7 @@
   const verdictReason = document.querySelector("[data-verdict-reason]");
   const reportPreview = document.querySelector("[data-report-preview]");
   const feedback = document.querySelector("[data-action-feedback]");
+  const automationFeedback = document.querySelector("[data-automation-feedback]");
 
   const emptyState = () => ({ claims: {}, checks: {} });
   let state = emptyState();
@@ -100,6 +101,33 @@
     }, 3500);
   }
 
+  function setAutomationFeedback(message) {
+    if (!automationFeedback) return;
+    automationFeedback.textContent = message;
+  }
+
+  async function copyText(text, successMessage, failureMessage, output = feedback) {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (output === automationFeedback) setAutomationFeedback(successMessage);
+      else setFeedback(successMessage);
+      return true;
+    } catch {
+      const fallback = document.createElement("textarea");
+      fallback.value = text;
+      fallback.setAttribute("readonly", "");
+      fallback.className = "clipboard-fallback";
+      document.body.append(fallback);
+      fallback.select();
+      const copied = document.execCommand("copy");
+      fallback.remove();
+      const message = copied ? successMessage : failureMessage;
+      if (output === automationFeedback) setAutomationFeedback(message);
+      else setFeedback(message);
+      return copied;
+    }
+  }
+
   function formatClaim(key, fallback = "не заполнено") {
     const value = String(state.claims[key] || "").trim();
     return value || fallback;
@@ -132,20 +160,40 @@
 
   async function copyReport() {
     const report = buildReport();
-    try {
-      await navigator.clipboard.writeText(report);
-      setFeedback("Отчёт скопирован.");
+    await copyText(
+      report,
+      "Отчёт скопирован.",
+      "Не удалось скопировать — выдели текст отчёта вручную.",
+    );
+  }
+
+  async function copyAutocheckCommand() {
+    if (!window.PcCheckCommands) {
+      setAutomationFeedback("Команда не загрузилась. Обнови страницу и попробуй снова.");
       return;
-    } catch {
-      const fallback = document.createElement("textarea");
-      fallback.value = report;
-      fallback.setAttribute("readonly", "");
-      fallback.className = "clipboard-fallback";
-      document.body.append(fallback);
-      fallback.select();
-      const copied = document.execCommand("copy");
-      fallback.remove();
-      setFeedback(copied ? "Отчёт скопирован." : "Не удалось скопировать — выдели текст отчёта вручную.");
+    }
+    const command = window.PcCheckCommands.buildAutocheckCommand();
+    await copyText(
+      command,
+      "Скопировано. Теперь Win+X → Терминал → вставь → Enter.",
+      "Не удалось скопировать. Разреши доступ к буферу обмена и повтори.",
+      automationFeedback,
+    );
+  }
+
+  async function copyUsbCommand() {
+    const drive = document.querySelector("[data-usb-drive]")?.value;
+    try {
+      if (!window.PcCheckCommands) throw new Error("Команда не загрузилась. Обнови страницу.");
+      const command = window.PcCheckCommands.buildUsbPrepCommand(drive);
+      await copyText(
+        command,
+        "Скопировано. На домашнем ПК: Win+X → Терминал → вставь → Enter.",
+        "Не удалось скопировать. Разреши доступ к буферу обмена и повтори.",
+        automationFeedback,
+      );
+    } catch (error) {
+      setAutomationFeedback(error instanceof Error ? error.message : "Проверь букву флешки.");
     }
   }
 
@@ -195,6 +243,8 @@
   }
 
   document.querySelector('[data-action="copy-report"]')?.addEventListener("click", copyReport);
+  document.querySelector('[data-action="copy-autocheck-command"]')?.addEventListener("click", copyAutocheckCommand);
+  document.querySelector('[data-action="copy-usb-command"]')?.addEventListener("click", copyUsbCommand);
   document.querySelector('[data-action="print-report"]')?.addEventListener("click", () => {
     if (reportPreview) reportPreview.textContent = buildReport();
     window.print();
