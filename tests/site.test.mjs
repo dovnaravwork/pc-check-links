@@ -140,6 +140,45 @@ test("builds a local-only autocheck command without stress or security bypasses"
   assert.doesNotMatch(command, /(?:OCCT|3D\s+Adaptive|Power\s+test)/i);
 });
 
+test("copies both generated commands through the visible buttons", async () => {
+  const handlers = {};
+  const copied = [];
+  const automationFeedback = { textContent: "" };
+  const driveInput = { value: "G:" };
+  const button = (name) => ({
+    addEventListener(type, handler) {
+      if (type === "click") handlers[name] = handler;
+    },
+  });
+  const elements = new Map([
+    ['[data-action="copy-autocheck-command"]', button("autocheck")],
+    ['[data-action="copy-usb-command"]', button("usb")],
+    ["[data-usb-drive]", driveInput],
+    ["[data-automation-feedback]", automationFeedback],
+  ]);
+  const context = {
+    window: { setTimeout() {}, print() {} },
+    navigator: { clipboard: { async writeText(value) { copied.push(value); } } },
+    localStorage: { getItem() { return null; }, setItem() {}, removeItem() {} },
+    document: {
+      querySelector(selector) { return elements.get(selector) ?? null; },
+      querySelectorAll() { return []; },
+      createElement() { throw new Error("clipboard fallback should not run"); },
+      execCommand() { return false; },
+      body: { append() {} },
+    },
+  };
+  vm.runInNewContext(commandsScript, context);
+  vm.runInNewContext(script, context);
+
+  await handlers.autocheck();
+  await handlers.usb();
+
+  assert.equal(copied[0], context.window.PcCheckCommands.buildAutocheckCommand());
+  assert.equal(copied[1], context.window.PcCheckCommands.buildUsbPrepCommand("G:"));
+  assert.match(automationFeedback.textContent, /Скопировано/i);
+});
+
 test("offers pass, caution, stop, and unverified for every interactive check", () => {
   const statuses = ["pass", "caution", "stop", "unverified"];
   const counts = Object.fromEntries(
