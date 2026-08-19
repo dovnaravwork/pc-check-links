@@ -216,6 +216,18 @@ test("walks a novice through the OCCT support countdown and emergency Stop", () 
   );
 });
 
+test("uses an adaptive purchase load that reaches 100 percent without Power test", () => {
+  const load = sliceBetween(html, 'data-check="load"', 'data-check="ports"');
+  assertPattern(load, /3D\s+Adaptive/i);
+  assertPattern(load, /Variable/i);
+  assertPattern(load, /15\s*%[^<]{0,100}100\s*%/i);
+  assertPattern(load, /\+?5\s*%[^<]{0,80}20\s*сек/i);
+  assertPattern(load, /3D[\s\S]{0,300}7\s*минут/i);
+  assertPattern(load, /CPU[^<]{0,100}5\s*минут/i);
+  assertPattern(load, /Memory[^<]{0,100}5\s*минут/i);
+  assertPattern(load, /не\s+запускай[^<]{0,80}\bPower\b/i);
+});
+
 test("separates GPU core, hotspot, and memory and orders thermal remediation", () => {
   assertPattern(html, /GPU\s*(?:Core|ядр)/i);
   assertPattern(html, /(?:GPU\s*)?(?:Hot\s*Spot|Hotspot|горяч\w* точк)/i);
