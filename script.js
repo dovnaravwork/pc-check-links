@@ -24,6 +24,9 @@
   const reportPreview = document.querySelector("[data-report-preview]");
   const feedback = document.querySelector("[data-action-feedback]");
   const automationFeedback = document.querySelector("[data-automation-feedback]");
+  const driveInput = document.querySelector("[data-usb-drive]");
+  const autocheckPreview = document.querySelector("[data-autocheck-command-preview]");
+  const usbPreview = document.querySelector("[data-usb-command-preview]");
 
   const emptyState = () => ({ claims: {}, checks: {} });
   let state = emptyState();
@@ -181,8 +184,20 @@
     );
   }
 
+  function renderCommandPreviews() {
+    if (!window.PcCheckCommands) return;
+    if (autocheckPreview) autocheckPreview.value = window.PcCheckCommands.buildAutocheckCommand();
+    if (usbPreview) {
+      try {
+        usbPreview.value = window.PcCheckCommands.buildUsbPrepCommand(driveInput?.value);
+      } catch {
+        usbPreview.value = "Проверь букву флешки: нужна одна буква от D до Z.";
+      }
+    }
+  }
+
   async function copyUsbCommand() {
-    const drive = document.querySelector("[data-usb-drive]")?.value;
+    const drive = driveInput?.value;
     try {
       if (!window.PcCheckCommands) throw new Error("Команда не загрузилась. Обнови страницу.");
       const command = window.PcCheckCommands.buildUsbPrepCommand(drive);
@@ -245,6 +260,7 @@
   document.querySelector('[data-action="copy-report"]')?.addEventListener("click", copyReport);
   document.querySelector('[data-action="copy-autocheck-command"]')?.addEventListener("click", copyAutocheckCommand);
   document.querySelector('[data-action="copy-usb-command"]')?.addEventListener("click", copyUsbCommand);
+  driveInput?.addEventListener?.("input", renderCommandPreviews);
   document.querySelector('[data-action="print-report"]')?.addEventListener("click", () => {
     if (reportPreview) reportPreview.textContent = buildReport();
     window.print();
@@ -252,5 +268,6 @@
   document.querySelector('[data-action="reset"]')?.addEventListener("click", resetProgress);
 
   state = readState();
+  renderCommandPreviews();
   renderState();
 })();

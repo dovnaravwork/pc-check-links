@@ -60,6 +60,7 @@
           <span class="automation-number">01 · НА ВСТРЕЧЕ</span>
           <h3>Автопроверка Windows</h3>
           <p>За 1–2 минуты собирает CPU, GPU, RAM, состояние дисков, проблемные устройства, WHEA и статус Defender. Сохраняет JSON и открывает понятную сводку на рабочем столе.</p>
+          <label class="command-preview-label"><span>Точная команда, которая попадёт в буфер</span><textarea rows="5" readonly data-autocheck-command-preview aria-label="Команда автоматической проверки Windows"></textarea></label>
           <button class="button dark" type="button" data-action="copy-autocheck-command">Скопировать автопроверку</button>
           <ul>
             <li>Работает локально и ничего не скачивает.</li>
@@ -71,10 +72,11 @@
         <article class="automation-card">
           <span class="automation-number">00 · ДО ВСТРЕЧИ</span>
           <h3>Вся флешка одной командой</h3>
-          <p>Укажи букву флешки. WinGet скачает пять диагностических пакетов, проверит их по manifest-хэшам, создаст SHA-256 список и попросит Defender проверить папку. Ничего не устанавливается и не запускается.</p>
+          <p>Укажи букву съёмной флешки. Команда проверит официальный источник WinGet и попытается скачать пять зафиксированных версий. Комплект получит отметку COMPLETE только после хэшей и Defender. Ничего не устанавливается и не запускается.</p>
           <label class="drive-field"><span>Буква флешки</span><input type="text" value="E:" maxlength="2" inputmode="text" autocomplete="off" spellcheck="false" data-usb-drive aria-describedby="drive-help"></label>
+          <label class="command-preview-label"><span>Точная команда, которая попадёт в буфер</span><textarea rows="5" readonly data-usb-command-preview aria-label="Команда подготовки флешки"></textarea></label>
           <button class="button outline" type="button" data-action="copy-usb-command">Скопировать команду для флешки</button>
-          <p id="drive-help" class="automation-help">Если флешка отображается как F:, замени E: на F:. Команда создаёт только папку <b>PC-Check</b> и ничего не удаляет.</p>
+          <p id="drive-help" class="automation-help">Если флешка отображается как F:, замени E: на F:. Внутренний диск команда отклонит. После вставки сравни начало и конец с полем выше и только потом нажимай Enter.</p>
         </article>
       </div>
       <p class="automation-feedback" data-automation-feedback aria-live="polite"></p>
