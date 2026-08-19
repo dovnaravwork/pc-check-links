@@ -105,6 +105,8 @@ test("builds a WinGet-only USB command for all five diagnostics", () => {
   assert.match(command, /--source\s+winget/i);
   assert.match(command, /--download-directory/i);
   assert.match(command, /Get-FileHash[^;]*SHA256/i);
+  assert.match(command, /\.FullName\.Substring\s*\(\s*\$Tools\.Length\s*\)/i);
+  assert.match(command, /File\s*=.*SHA256\s*=/i);
   assert.match(command, /WaitForExit\s*\(\s*\$TimeoutMs\s*\)/i);
   assert.match(command, /\.Kill\s*\(\s*\)/i);
   assert.match(command, /\$BeforeCount/i);
