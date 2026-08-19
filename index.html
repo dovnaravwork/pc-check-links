@@ -6,6 +6,7 @@
   <meta name="description" content="Пошаговая проверка подержанного Windows-ПК: официальные инструменты, контролируемая нагрузка, доказательства и решение покупать или нет.">
   <title>Проверка б/у ПК — маршрут покупателя</title>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#route">К шагам проверки</a>
@@ -13,6 +14,7 @@
     <a class="brand" href="#top" aria-label="К началу страницы"><span>PC</span> CHECK / FIELD GUIDE</a>
     <nav aria-label="Разделы страницы">
       <a href="#downloads">Инструменты</a>
+      <a href="#session">Проверка</a>
       <a href="#route">Маршрут</a>
       <a href="#decision">Решение</a>
     </nav>
@@ -62,7 +64,7 @@
           <ol class="fallback-steps">
             <li><strong>Основное:</strong> дома открой страницу CPUID и выбери <b>ZIP · English</b> — portable-архив не требует установки.</li>
             <li><strong>Если 30 секунд нет загрузки:</strong> отмени её, не ищи «зеркало CPU-Z» в поиске. Возьми уже проверенный архив с флешки.</li>
-            <li><strong>Если флешки нет:</strong> продолжай HWiNFO и Диспетчером задач Windows, но пометь CPU/RAM как «не подтверждено» и не плати полную цену.</li>
+            <li><strong>Если флешки нет:</strong> открой HWiNFO Summary и Диспетчер задач. Если CPU/RAM полностью не подтверждены — <b>СТОП</b>: перенеси встречу, а не покупай вслепую.</li>
           </ol>
         </div>
         <a class="button dark" href="https://www.cpuid.com/softwares/cpu-z.html" target="_blank" rel="noopener noreferrer">Открыть CPUID <span aria-hidden="true">↗</span></a>
@@ -78,28 +80,28 @@
 
         <article class="tool-row">
           <div class="tool-index">02</div>
-          <div class="tool-main"><p class="tool-meta">TechPowerUp · Standard version</p><h3>GPU-Z</h3><p>Модель GPU, объём VRAM, VBIOS и работа шины PCIe под Render Test.</p></div>
+          <div class="tool-main"><p class="tool-meta">TechPowerUp · portable EXE</p><h3>GPU-Z</h3><p>Модель GPU, объём VRAM, VBIOS и работа шины PCIe под Render Test.</p></div>
           <div class="tool-use"><span>Снять</span><b>Главный экран · Sensors</b></div>
           <div class="tool-actions"><a class="button small outline" href="https://www.techpowerup.com/download/techpowerup-gpu-z/" target="_blank" rel="noopener noreferrer">Страница автора ↗</a><span>Источник: TechPowerUp · есть SHA-256</span></div>
         </article>
 
         <article class="tool-row">
           <div class="tool-index">03</div>
-          <div class="tool-main"><p class="tool-meta">Crystal Dew World · Standard Edition</p><h3>CrystalDiskInfo</h3><p>SMART, ресурс, температура, часы и включения каждого SSD/HDD. Актуальная версия на странице автора: 9.9.2.</p></div>
+          <div class="tool-main"><p class="tool-meta">Crystal Dew World · portable ZIP · Standard Edition</p><h3>CrystalDiskInfo</h3><p>SMART, ресурс, температура, часы и включения каждого SSD/HDD. Номер актуальной версии смотри на странице автора.</p></div>
           <div class="tool-use"><span>Снять</span><b>Отдельный кадр каждого диска</b></div>
-          <div class="tool-actions"><a class="button small outline" href="https://crystalmark.info/en/software/CrystalDiskInfo/" target="_blank" rel="noopener noreferrer">Страница автора ↗</a><a class="text-link" href="https://sourceforge.net/projects/crystaldiskinfo/files/9.9.2/CrystalDiskInfo9_9_2.exe/download" target="_blank" rel="noopener noreferrer">SourceForge из официальной страницы ↗</a></div>
+          <div class="tool-actions"><a class="button small outline" href="https://crystalmark.info/en/software/CrystalDiskInfo/" target="_blank" rel="noopener noreferrer">Страница автора ↗</a><a class="text-link" href="https://sourceforge.net/projects/crystaldiskinfo/files/" target="_blank" rel="noopener noreferrer">Официальные файлы SourceForge ↗</a></div>
         </article>
 
         <article class="tool-row">
           <div class="tool-index">04</div>
-          <div class="tool-main"><p class="tool-meta">REALiX · HWiNFO64 portable</p><h3>HWiNFO</h3><p>Температуры, частоты, мощность и флаги троттлинга во время теста.</p></div>
+          <div class="tool-main"><p class="tool-meta">REALiX · HWiNFO64 · portable ZIP</p><h3>HWiNFO</h3><p>Температуры, частоты, мощность и флаги троттлинга во время теста.</p></div>
           <div class="tool-use"><span>Снять</span><b>Sensors · столбец Maximum</b></div>
-          <div class="tool-actions"><a class="button small outline" href="https://www.hwinfo.com/download/" target="_blank" rel="noopener noreferrer">Страница автора ↗</a><a class="text-link" href="https://www.sac.sk/download/utildiag/hwi_850x.exe" target="_blank" rel="noopener noreferrer">Зеркало SAC, указанное HWiNFO ↗</a></div>
+          <div class="tool-actions"><a class="button small outline" href="https://www.hwinfo.com/download/" target="_blank" rel="noopener noreferrer">Страница автора ↗</a><a class="text-link" href="https://sourceforge.net/projects/hwinfo/files/Windows_Portable/" target="_blank" rel="noopener noreferrer">Portable ZIP на SourceForge автора ↗</a></div>
         </article>
 
         <article class="tool-row">
           <div class="tool-index">05</div>
-          <div class="tool-main"><p class="tool-meta">OCBASE · Personal · Windows</p><h3>OCCT</h3><p>Короткая нагрузка на видеокарту, процессор и память. Актуальная ветка: v17.</p></div>
+          <div class="tool-main"><p class="tool-meta">OCBASE · Personal · portable EXE · Windows</p><h3>OCCT</h3><p>Короткая нагрузка на видеокарту, процессор и память. Номер актуальной версии смотри на странице автора.</p></div>
           <div class="tool-use"><span>Запускать</span><b>3D → CPU → Memory</b></div>
           <div class="tool-actions"><a class="button small outline" href="https://www.ocbase.com/download" target="_blank" rel="noopener noreferrer">Страница автора ↗</a><span>Источник: OCBASE · Personal · Stable</span></div>
         </article>
@@ -107,8 +109,22 @@
 
       <aside class="verify-box" aria-labelledby="verify-title">
         <h3 id="verify-title">Перед копированием на флешку</h3>
-        <p><b>1.</b> Скачай дома. <b>2.</b> Проверь файл Защитником Windows. <b>3.</b> Для EXE — правой кнопкой → Свойства → Цифровые подписи → Сведения: должно быть «Цифровая подпись действительна». ZIP сам может быть не подписан — проверь EXE внутри после распаковки. <b>4.</b> Если автор публикует SHA-256, сравни его через PowerShell: <code>Get-FileHash .\имя-файла.exe -Algorithm SHA256</code>. Нет подписи и опубликованного хэша — файл не считается проверенным только из-за названия. <b>5.</b> Подпиши папку датой проверки.</p>
+        <div><p><b>1.</b> Скачай дома. <b>2.</b> Проверь файл Защитником Windows. <b>3.</b> Для EXE — правой кнопкой → Свойства → Цифровые подписи → Сведения: должно быть «Цифровая подпись действительна». ZIP сам может быть не подписан — проверь EXE внутри после распаковки. <b>4.</b> Если автор публикует SHA-256, сравни его через PowerShell: <code>Get-FileHash .\имя-файла.exe -Algorithm SHA256</code>. <b>5.</b> Сохрани рядом текстовый manifest: имя, версия, SHA-256, дата и URL.</p><p><b>Если любой файл недоступен:</b> не ищи репак или случайное зеркало. Используй заранее проверенную флешку; если без программы обязательный пункт нельзя подтвердить, отметь «Не проверено» и не оплачивай ПК.</p><p class="publisher-note"><b>Проверенный издатель UAC:</b> CPU-Z — <b>CPUID</b>; HWiNFO — <b>REALiX, s.r.o.</b> Если Windows показывает «Неизвестный издатель» / Unknown publisher — <b>СТОП, нажми «Нет» и отмени запуск</b>. Для остальных файлов не угадывай издателя: сверяй подпись и хэш с официальной страницей.</p></div>
       </aside>
+    </section>
+
+    <section id="session" class="section session" aria-labelledby="session-title">
+      <div class="section-intro compact">
+        <div><p class="eyebrow">Локальный лист проверки</p><h2 id="session-title">Запиши условия<br>до тестов</h2></div>
+        <p>Данные остаются только в localStorage этого браузера. Сайт ничего не отправляет. Поля необязательны; не записывай паспортные данные, телефоны или пароли.</p>
+      </div>
+      <div class="claim-grid">
+        <label><span>Модель / объявление</span><input type="text" name="claim" data-claim="claim" autocomplete="off" placeholder="Например: Ryzen 5 5600 + RTX 3060"></label>
+        <label><span>Цена</span><input type="text" name="price" data-claim="price" inputmode="decimal" autocomplete="off" placeholder="Например: 55 000 ₽"></label>
+        <label><span>Дата и место</span><input type="text" name="meeting" data-claim="meeting" autocomplete="off" placeholder="Дата, город или магазин"></label>
+        <label class="claim-wide"><span>Manifest проверенной флешки</span><textarea name="manifest" data-claim="manifest" rows="3" placeholder="Имя файла · версия · SHA-256 · дата · официальный URL"></textarea></label>
+      </div>
+      <noscript><p class="noscript-note">JavaScript выключен: инструкция ниже доступна, но статусы, сохранение и отчёт работать не будут.</p></noscript>
     </section>
 
     <section id="route" class="section route" aria-labelledby="route-title">
@@ -118,30 +134,35 @@
       </div>
 
       <ol class="route-list">
-        <li>
+        <li data-check="inspection" data-check-title="Осмотр до включения">
           <div class="route-time">0–5 мин</div>
-          <div class="route-copy"><h3>Осмотр до включения</h3><p>Сфотографируй общий вид, наклейку блока питания, питание видеокарты, слоты RAM/M.2 и серийные номера. Проверь пломбы, коррозию, следы жидкости, гари и грубого ремонта. Сам блок питания не вскрывай и ничего внутри него не измеряй.</p><p class="stop"><b>Стоп:</b> запах гари, потемнения, жидкость, искры, оголённые провода или продавец запрещает открыть корпус.</p></div>
+          <div class="route-copy"><h3>Осмотр и холодный запуск</h3><p>Сфотографируй общий вид, читаемую наклейку блока питания, питание видеокарты, слоты RAM/M.2 и серийные номера. Проверь пломбы, коррозию, следы жидкости, гари и грубого ремонта. Сам блок питания не вскрывай и ничего внутри него не измеряй. Попроси включить ПК из полностью выключенного состояния: обрати внимание на ошибки старта, посторонний треск и запах.</p><p class="stop"><b>Стоп:</b> запах гари, потемнения, жидкость, искры, оголённые провода, нечитаемая/отсутствующая наклейка БП у игрового ПК, сбой холодного запуска или продавец запрещает открыть корпус.</p></div>
           <div class="evidence"><span>Доказательство</span><b>5–7 фото корпуса</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат осмотра"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Что увидел и какие фото сделал"></textarea></label></div>
         </li>
-        <li>
+        <li data-check="components" data-check-title="Состав компьютера">
           <div class="route-time">5–10 мин</div>
-          <div class="route-copy"><h3>Сверка состава</h3><p>CPU-Z: CPU, Mainboard, Memory, по очереди каждый Slot в SPD. GPU-Z: название, Memory Size и Bus Interface; нажми «?» и запусти Render Test — шина должна перейти из режима простоя.</p><p class="trade"><b>Торг:</b> одна планка RAM вместо двух, меньший объём/частота, другая плата или накопитель. Несовпадение дорогого CPU/GPU — остановка сделки.</p></div>
+          <div class="route-copy"><h3>Сверка состава</h3><p>CPU-Z: CPU, Mainboard, Memory, по очереди каждый Slot в SPD. GPU-Z: название, Memory Size и Bus Interface; нажми «?» и запусти Render Test — шина должна перейти из режима простоя. Открой Диспетчер устройств: жёлтый восклицательный знак означает проблему — открой свойства устройства и запиши код.</p><p class="trade"><b>Торг:</b> одна планка RAM при честно заявленном общем объёме или другой заранее оговорённый недорогой компонент. <b>Стоп:</b> модель CPU/GPU/платы, VRAM, объём RAM или накопителя не совпадают с объявлением — сначала продавец должен объяснить расхождение и пересчитать цену.</p></div>
           <div class="evidence"><span>Доказательство</span><b>6 скриншотов</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат сверки состава"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="CPU, GPU, RAM и отличия от объявления"></textarea></label></div>
         </li>
-        <li>
+        <li data-check="storage" data-check-title="Накопители и SMART">
           <div class="route-time">10–15 мин</div>
-          <div class="route-copy"><h3>Каждый накопитель</h3><p>В CrystalDiskInfo переключи диски стрелками. Сними Health Status, температуру, часы и SMART. Уточни, какой диск входит в продажу.</p><p class="stop"><b>Стоп или цена немедленной замены:</b> Bad/Caution; для HDD особенно 05, C5 или C6 больше нуля, для SSD — критически малый остаток ресурса. <b>Не пройдено:</b> Unknown, USB или RAID требуют отдельной диагностики и не считаются чистым результатом. Good тоже не гарантирует будущую исправность.</p></div>
+          <div class="route-copy"><h3>Каждый накопитель</h3><p>В CrystalDiskInfo переключи диски стрелками. Сними Health Status, температуру, часы и SMART. Уточни, какой диск входит в продажу.</p><p class="stop"><b>Стоп:</b> Bad, пропадающий диск или у HDD значения 05, C5 либо C6 больше нуля. <b>Торг только с ценой немедленной замены:</b> Caution из-за малого остатка ресурса SSD. <b>Не проверено:</b> Unknown, USB или RAID требуют отдельной диагностики и не считаются чистым результатом. Good тоже не гарантирует будущую исправность.</p></div>
           <div class="evidence"><span>Доказательство</span><b>1 кадр на диск</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат проверки дисков"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Модели, Health, часы и важные SMART"></textarea></label></div>
         </li>
-        <li>
+        <li data-check="load" data-check-title="Контролируемая нагрузка">
           <div class="route-time">15–27 мин</div>
-          <div class="route-copy"><h3>Короткая контролируемая нагрузка</h3><p>Запомни время старта. Спроси согласие продавца, закрой игры и лишние программы, открой HWiNFO в режиме Sensors. В OCCT: 3D на 3 минуты, CPU на 4 минуты и Memory на 4 минуты. Следи за ошибками, температурами и Maximum. Не запускай Power и не меняй напряжения.</p><p class="stop"><b>Стоп сразу:</b> артефакты, ошибка OCCT, BSOD, ребут, выключение, запах или резкий треск вентилятора. Устойчивый или повторяющийся Thermal Throttling на штатных настройках — красный флаг; единичный пик перепроверь. Power/Current Limit сам по себе не означает перегрев.</p></div>
+          <div class="route-copy"><h3>Короткая контролируемая нагрузка</h3><p><b>До Start:</b> спроси согласие продавца, закрой игры, запусти HWiNFO Sensors. Запиши часы и минуты начала в заметке ниже и проверь, есть ли уже события WHEA-Logger — журнал не очищай. UAC требует действия человека у ПК: сверь Verified publisher. В OCCT Personal закрой окно поддержки только после обратного отсчёта. Сначала найди кнопку <b>Stop</b>, покажи её продавцу и лишь затем нажимай <b>Start</b>. Время теста считай после фактического старта нагрузки, а не во время countdown.</p><p>OCCT: 3D на 3 минуты, CPU на 4 минуты и Memory на 4 минуты. Запиши отдельно <b>GPU Core</b>, <b>GPU Hot Spot</b> и <b>GPU Memory / VRAM</b>. Не существует единого универсального температурного порога: сверь точную модель, динамику, ошибки и throttling.</p><p class="stop"><b>Нажми Stop немедленно</b> при артефактах, ошибке, запахе, BSOD или ребуте. Если Stop не срабатывает в удалённом интерфейсе, продавец должен остановить тест локально; не начинай следующий тест.</p><p class="thermal-note"><b>Если Hot Spot настораживает:</b> сначала проверь пыль. Чистить можно только на выключенном ПК и с согласия продавца. После безопасной очистки повтори тот же тест с теми же настройками → проверь обдув и воздушный поток корпуса → закладывай диагностику и обслуживание в сервисе. Если чистить на встрече нельзя, не продолжай нагрузку: фиксируй «Стоп» или стоимость сервиса. Параметр fan curve не меняй в BIOS или GCC и не подгоняй результат на чужом ПК.</p><p class="stop"><b>Стоп:</b> устойчивый Thermal Throttling на штатных настройках. Power/Current Limit сам по себе не означает перегрев.</p></div>
           <div class="evidence"><span>Доказательство</span><b>OCCT + HWiNFO Max</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат нагрузки"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Время старта · Core / Hot Spot / VRAM · ошибки · длительность"></textarea></label></div>
         </li>
-        <li>
+        <li data-check="ports" data-check-title="Порты и WHEA">
           <div class="route-time">27–30 мин</div>
           <div class="route-copy"><h3>Порты и финальная сверка</h3><p>Проверь USB флешкой, звук, Ethernet/Wi‑Fi и заявленные видеовыходы. Затем: Просмотр событий → Журналы Windows → Система → Фильтр текущего журнала → источник <b>WHEA-Logger</b>. Журнал не очищай: сравни время событий с записанным временем старта теста.</p><p class="stop"><b>Стоп:</b> новые WHEA-Logger события в интервале твоего теста. Старые записи за другую дату — контекст, но не результат текущей проверки.</p><p class="trade"><b>Торг:</b> неработающий вторичный порт, шумный вентилятор, слабая батарейка CMOS. Неисправный основной видеовыход или сетевой адаптер — только если готов ремонтировать.</p></div>
           <div class="evidence"><span>Доказательство</span><b>Фото портов + итог</b></div>
+          <div class="check-entry"><div class="status-controls" aria-label="Результат проверки портов"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Порты, сеть, звук и новые WHEA"></textarea></label></div>
         </li>
       </ol>
     </section>
@@ -151,11 +172,21 @@
         <div><p class="eyebrow">Шаг 05 · решение</p><h2 id="decision-title">Не гадай.<br>Сверь результат.</h2></div>
         <p>Короткий тест означает только «явных проблем не найдено». Он не даёт гарантии и программами нельзя доказать исправность блока питания.</p>
       </div>
+      <div class="live-verdict" data-verdict-output="unverified" aria-live="polite">
+        <span>Текущий итог</span><strong data-verdict-label>НЕ ПРОВЕРЕНО</strong><p data-verdict-reason>Отметь результат каждого шага. Непроверенный пункт не считается успешным.</p>
+      </div>
       <div class="decision-grid">
         <article class="decision-card go"><span class="decision-code">ПРОДОЛЖИТЬ</span><h3>Всё совпало</h3><ul><li>Состав как в объявлении</li><li>SMART без тревог</li><li>OCCT без ошибок и сбоев</li><li>Порты работают</li><li>Есть все доказательства</li></ul></article>
-        <article class="decision-card bargain"><span class="decision-code">ТОРГ</span><h3>Проблема оценима</h3><ul><li>Одна планка RAM</li><li>Caution — с ценой замены диска</li><li>Шумный вентилятор</li><li>Не работает вторичный порт</li><li>Модель БП слабее обещанной</li></ul></article>
+        <article class="decision-card bargain"><span class="decision-code">ТОРГ</span><h3>Проблема оценима</h3><ul><li>Одна планка RAM при честном объёме</li><li>Caution — с ценой немедленной замены диска</li><li>Шумный вентилятор</li><li>Не работает вторичный порт</li><li>Известный, но бюджетный БП — с ценой замены</li></ul></article>
         <article class="decision-card stop-card"><span class="decision-code">СТОП</span><h3>Риск неизвестен</h3><ul><li>Состав подменён</li><li>Артефакты, ошибки, BSOD</li><li>Bad / пропадающий диск</li><li>SMART Unknown без отдельной проверки</li><li>Гарь, коррозия, жидкость</li><li>Не дают проверить или торопят</li></ul></article>
       </div>
+      <div class="report-actions">
+        <button class="button dark" type="button" data-action="copy-report">Скопировать отчёт</button>
+        <button class="button outline" type="button" data-action="print-report">Печать / PDF</button>
+        <button class="button quiet" type="button" data-action="reset">Сбросить всё</button>
+        <p class="action-feedback" data-action-feedback role="status" aria-live="polite"></p>
+      </div>
+      <pre class="report-preview" data-report-preview aria-label="Предпросмотр текстового отчёта"></pre>
     </section>
 
     <section class="evidence-pack" aria-labelledby="evidence-title">
@@ -166,7 +197,7 @@
 
   <footer>
     <p><b>Важно:</b> не вводи свои пароли на чужом ПК, не подключай личный облачный диск и не отключай антивирус по просьбе продавца.</p>
-    <p>Версии проверены 19.08.2026 · Файлы загружаются с сайтов авторов, не с этой страницы.</p>
+    <p>Версии проверены 19.08.2026 · Файлы загружаются с сайтов авторов или указанных ими площадок, не с этой страницы.</p>
   </footer>
 </body>
 </html>
