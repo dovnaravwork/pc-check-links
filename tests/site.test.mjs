@@ -13,6 +13,7 @@ const readOptional = (name) =>
 const html = read("index.html");
 const css = read("style.css");
 const script = readOptional("script.js");
+const commandsScript = readOptional("commands.js");
 const readme = readOptional("README.md");
 
 function tags(name, source = html) {
@@ -66,6 +67,65 @@ test("loads all runtime code locally, including script.js", () => {
     /<script\b(?=[^>]*\bsrc=["']script\.js["'])[^>]*><\/script>/i,
     "index.html must load the local script.js",
   );
+});
+
+test("offers one-click copy actions for USB preparation and native autocheck", () => {
+  assert.ok(commandsScript, "commands.js must contain auditable local commands");
+  assertPattern(
+    html,
+    /<script\b(?=[^>]*\bsrc=["']commands\.js["'])[^>]*><\/script>/i,
+    "index.html must load commands.js locally",
+  );
+  assertPattern(html, /\bdata-action=["']copy-usb-command["']/i);
+  assertPattern(html, /\bdata-action=["']copy-autocheck-command["']/i);
+  assertPattern(html, /\bdata-usb-drive\b/i);
+  assertPattern(script, /PcCheckCommands\.buildUsbPrepCommand\s*\(/);
+  assertPattern(script, /PcCheckCommands\.buildAutocheckCommand\s*\(/);
+});
+
+test("builds a WinGet-only USB command for all five diagnostics", () => {
+  const context = { window: {} };
+  vm.runInNewContext(commandsScript, context);
+  const api = context.window.PcCheckCommands;
+  assert.ok(api, "commands.js must expose PcCheckCommands");
+
+  const command = api.buildUsbPrepCommand("f:");
+  assert.match(command, /\$Drive='F:';/);
+  for (const id of [
+    "CPUID.CPU-Z",
+    "TechPowerUp.GPU-Z",
+    "CrystalDewWorld.CrystalDiskInfo",
+    "REALiX.HWiNFO",
+    "OCBase.OCCT.Personal",
+  ]) {
+    assert.match(command, new RegExp(id.replaceAll(".", "\\.")));
+  }
+  assert.match(command, /winget\s+download/i);
+  assert.match(command, /--exact/i);
+  assert.match(command, /--source\s+winget/i);
+  assert.match(command, /--download-directory/i);
+  assert.match(command, /Get-FileHash[^;]*SHA256/i);
+  assert.doesNotMatch(command, /winget\s+(?:install|import)/i);
+  assert.doesNotMatch(command, /ignore-security-hash/i);
+  assert.throws(() => api.buildUsbPrepCommand("C:"), /D.*Z/i);
+  assert.throws(() => api.buildUsbPrepCommand("F:\\PC"), /D.*Z/i);
+});
+
+test("builds a local-only autocheck command without stress or security bypasses", () => {
+  const context = { window: {} };
+  vm.runInNewContext(commandsScript, context);
+  const command = context.window.PcCheckCommands.buildAutocheckCommand();
+
+  assert.match(command, /Get-CimInstance\s+Win32_Processor/i);
+  assert.match(command, /Get-CimInstance\s+Win32_VideoController/i);
+  assert.match(command, /Get-PhysicalDisk/i);
+  assert.match(command, /Get-PnpDevice/i);
+  assert.match(command, /Microsoft-Windows-WHEA-Logger/i);
+  assert.match(command, /ConvertTo-Json/i);
+  assert.match(command, /НЕ ПРОВЕРЕНО/i);
+  assert.doesNotMatch(command, /(?:Invoke-WebRequest|curl|wget|Start-BitsTransfer|https?:\/\/)/i);
+  assert.doesNotMatch(command, /(?:Invoke-Expression|\biex\b|ExecutionPolicy|Add-MpPreference|Set-MpPreference)/i);
+  assert.doesNotMatch(command, /(?:OCCT|3D\s+Adaptive|Power\s+test)/i);
 });
 
 test("offers pass, caution, stop, and unverified for every interactive check", () => {
