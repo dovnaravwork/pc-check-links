@@ -2,11 +2,11 @@
   "use strict";
 
   const packageIds = Object.freeze([
-    "CPUID.CPU-Z",
     "TechPowerUp.GPU-Z",
     "CrystalDewWorld.CrystalDiskInfo",
     "REALiX.HWiNFO",
     "OCBase.OCCT.Personal",
+    "CPUID.CPU-Z",
   ]);
 
   function normalizeDrive(value) {
@@ -29,9 +29,10 @@
       "New-Item -ItemType Directory -Force -Path $Tools,$Reports | Out-Null",
       `$Packages=@(${packages})`,
       "$Failed=@()",
-      "foreach($Id in $Packages){Write-Host ('Скачиваю '+$Id) -ForegroundColor Cyan; winget download --id $Id --exact --source winget --architecture x64 --download-directory $Tools --accept-source-agreements --accept-package-agreements --disable-interactivity; if($LASTEXITCODE -ne 0){$Failed+=$Id}}",
+      "$WingetBaseArgs=@('download','--exact','--source','winget','--download-directory',$Tools,'--accept-source-agreements','--accept-package-agreements','--disable-interactivity')",
+      "foreach($Id in $Packages){Write-Host ('winget download --id '+$Id+' --exact --source winget --download-directory '+$Tools) -ForegroundColor Cyan;$TimeoutMs=if($Id -eq 'CPUID.CPU-Z'){45000}else{180000};$BeforeCount=@(Get-ChildItem $Tools -Recurse -File -ErrorAction SilentlyContinue).Count;$WingetArgs=@('download','--id',$Id)+$WingetBaseArgs[1..($WingetBaseArgs.Count-1)];$Process=Start-Process winget.exe -ArgumentList $WingetArgs -PassThru -NoNewWindow;$Completed=$Process.WaitForExit($TimeoutMs);if(-not $Completed){try{$Process.Kill()}catch{};$Process.WaitForExit();$Failed+=($Id+' (таймаут)')}else{$AfterCount=@(Get-ChildItem $Tools -Recurse -File -ErrorAction SilentlyContinue).Count;if($AfterCount -le $BeforeCount){$Failed+=$Id}}}",
       "$Manifest=Join-Path $Root 'SHA256.csv'",
-      "Get-ChildItem $Tools -Recurse -File | Get-FileHash -Algorithm SHA256 | Select-Object Path,Hash | Export-Csv -NoTypeInformation -Encoding UTF8 -Path $Manifest",
+      "Get-ChildItem $Tools -Recurse -File | ForEach-Object{$Hash=Get-FileHash $_.FullName -Algorithm SHA256;[pscustomobject]@{File=$_.FullName.Substring($Tools.Length).TrimStart('\\');SHA256=$Hash.Hash}} | Export-Csv -NoTypeInformation -Encoding UTF8 -Path $Manifest",
       "$Readme=@('PC CHECK — набор для проверки','Файлы скачаны через WinGet без установки и запуска.','SHA-256 каждого файла: SHA256.csv','Не отключай Defender и не используй случайные зеркала.','Не запускай OCCT Power. Нагрузку начинай только с согласия продавца.')",
       "$Readme | Set-Content -Encoding UTF8 -Path (Join-Path $Root 'README.txt')",
       "try{Start-MpScan -ScanType CustomScan -ScanPath $Tools -ErrorAction Stop}catch{Write-Warning 'Автоскан Defender недоступен — проверь папку вручную'}",
@@ -56,7 +57,11 @@
       "$Report=[ordered]@{CollectedAt=(Get-Date).ToString('o');CPU=$Cpu;GPU=$Gpu;RAM=$Ram;Storage=$Storage;DeviceProblems=$DeviceProblems;WheaLast30Days=$Whea;Defender=$Defender;Limits=@('GPU AdapterRAM из WMI может быть неточным — сверь в GPU-Z','Блок питания и физическое состояние программно не проверяются','Нагрузочные тесты этим этапом не запускаются')} ",
       "$Json=Join-Path $Root 'report.json'",
       "$Report | ConvertTo-Json -Depth 7 | Set-Content -Encoding UTF8 -Path $Json",
-      "$Lines=@('АВТОЭТАП ЗАВЕРШЁН','CPU: '+(($Cpu.Name) -join ', '),'GPU: '+(($Gpu.Name) -join ', '),'RAM: '+([math]::Round((($Ram | Measure-Object Capacity -Sum).Sum/1GB),1))+' ГБ','Диски: '+(($Storage | ForEach-Object{$_.Name+' / '+$_.Health}) -join '; '),'Проблемные устройства: '+$DeviceProblems.Count,'WHEA за 30 дней: '+$Whea.Count,'','НЕ ПРОВЕРЕНО: БП, корпус, порты, точная VRAM и стабильность под нагрузкой.','Не оплачивай ПК до ручного осмотра и контролируемого теста.')",
+      "$CpuNames=($Cpu | ForEach-Object{$_.Name}) -join ', ' ",
+      "$GpuNames=($Gpu | ForEach-Object{$_.Name}) -join ', ' ",
+      "$RamGb=[math]::Round((($Ram | Measure-Object Capacity -Sum).Sum/1GB),1)",
+      "$DiskLines=($Storage | ForEach-Object{$_.Name+' / '+$_.Health}) -join '; ' ",
+      "$Lines=@('АВТОЭТАП ЗАВЕРШЁН',('CPU: '+$CpuNames),('GPU: '+$GpuNames),('RAM: '+$RamGb+' ГБ'),('Диски: '+$DiskLines),('Проблемные устройства: '+$DeviceProblems.Count),('WHEA за 30 дней: '+$Whea.Count),'','НЕ ПРОВЕРЕНО: БП, корпус, порты, точная VRAM и стабильность под нагрузкой.','Не оплачивай ПК до ручного осмотра и контролируемого теста.')",
       "$Text=Join-Path $Root 'СНАЧАЛА-ПРОЧТИ.txt'",
       "$Lines | Set-Content -Encoding UTF8 -Path $Text",
       "Start-Process notepad.exe -ArgumentList $Text",
