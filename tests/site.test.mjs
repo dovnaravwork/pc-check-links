@@ -186,6 +186,11 @@ test("labels and links portable packages without disguising installers", () => {
   assert.match(occt, /portable\s+EXE|EXE\s+portable/i);
 });
 
+test("states a practical USB drive capacity for the field kit", () => {
+  assertPattern(html, /флешк(?:а|у|е|и|ой)?[^.]{0,160}8\s*(?:ГБ|GB)/i,
+    "the preparation step must tell a novice what USB-drive size to bring");
+});
+
 test("gives exact UAC publisher guidance before elevation", () => {
   assertPattern(html, /Verified publisher|Проверенный издатель/i);
   assertPattern(html, /REALiX\s*,?\s*s\.r\.o\./i);
