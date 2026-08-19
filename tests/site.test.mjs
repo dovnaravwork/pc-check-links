@@ -107,12 +107,16 @@ test("builds a WinGet-only USB command for all five diagnostics", () => {
   assert.match(command, /Get-FileHash[^;]*SHA256/i);
   assert.match(command, /WaitForExit\s*\(\s*\$TimeoutMs\s*\)/i);
   assert.match(command, /\.Kill\s*\(\s*\)/i);
+  assert.match(command, /\$BeforeCount/i);
+  assert.match(command, /\$AfterCount/i);
   assert.ok(
     command.indexOf("CPUID.CPU-Z") > command.indexOf("OCBase.OCCT.Personal"),
     "the known-slow CPU-Z download must run last",
   );
   assert.doesNotMatch(command, /winget\s+(?:install|import)/i);
   assert.doesNotMatch(command, /ignore-security-hash/i);
+  assert.doesNotMatch(command, /--architecture/i);
+  assert.doesNotMatch(command, /\.ExitCode/i);
   assert.throws(() => api.buildUsbPrepCommand("C:"), /D.*Z/i);
   assert.throws(() => api.buildUsbPrepCommand("F:\\PC"), /D.*Z/i);
 });
