@@ -656,3 +656,137 @@ test("runs this dependency-free suite in GitHub Actions", () => {
   assertPattern(workflow, /node-version:\s*["']?22["']?/);
   assertPattern(workflow, /node --test tests\/site\.test\.mjs/);
 });
+
+test("keeps the first viewport focused on exactly two primary actions", () => {
+  const topbar = sliceBetween(html, '<header class="topbar"', "</header>");
+  const hero = sliceBetween(html, '<section class="hero"', "</section>");
+  const heroActions = tags("button", hero).filter((tag) =>
+    attribute(tag, "data-hero-action"),
+  );
+
+  assert.equal(heroActions.length, 2, "the first screen needs exactly two actions");
+  assert.doesNotMatch(
+    topbar,
+    /<nav\b/i,
+    "secondary navigation must not compete with the two primary actions",
+  );
+});
+
+test("reveals the exact fallback text after a hero copy action", () => {
+  assertPattern(script, /function\s+revealCommandPreview\s*\(/);
+  assertPattern(script, /scrollIntoView\s*\(/);
+  assertPattern(script, /\.focus\s*\(/);
+  assertPattern(script, /copyUsbCommand[\s\S]{0,900}revealCommandPreview/);
+  assertPattern(script, /copyGuidedCommand[\s\S]{0,900}revealCommandPreview/);
+});
+
+test("provides a real full-screen display check with an explicit exit", () => {
+  assertPattern(html, /\bdata-screen-overlay\b/i);
+  assertPattern(html, /\bdata-action=["']screen-next["']/i);
+  assertPattern(html, /\bdata-action=["']screen-exit["']/i);
+  assertPattern(script, /requestFullscreen\s*\(/i);
+  assertPattern(script, /fullscreenchange/i);
+});
+
+test("checks the complete keyboard sample before reporting success", () => {
+  for (const key of ["KeyA", "Enter", "Escape", "ArrowUp"]) {
+    assertPattern(script, new RegExp(key));
+  }
+  assertPattern(script, /Set\s*\(/);
+  assertPattern(script, /every\s*\(/);
+  assertPattern(script, /removeEventListener\s*\(\s*["']keydown["']/);
+});
+
+test("shows persistent completion progress like the MacBook checker", () => {
+  assertPattern(html, /\bdata-check-progress\b/i);
+  assertPattern(html, /\bdata-check-progress-bar\b/i);
+  assertPattern(html, /\bdata-check-progress-count\b/i);
+  assertPattern(script, /function\s+updateProgress\s*\(/);
+});
+
+test("presents screen, keyboard, and sound as separate instrument cards", () => {
+  for (const kind of ["screen", "keys", "sound"]) {
+    assertPattern(
+      html,
+      new RegExp(`data-browser-card=["']${kind}["']`, "i"),
+      `missing ${kind} instrument card`,
+    );
+    assertPattern(
+      html,
+      new RegExp(`data-test-result=["']${kind}["']`, "i"),
+      `missing ${kind} live result`,
+    );
+  }
+  assert.ok(
+    (html.match(/\bdata-test-badge\b/gi) || []).length >= 3,
+    "each browser instrument needs its own status badge",
+  );
+});
+
+test("requires explicit display confirmation after a varied full-screen sequence", () => {
+  const colorsSource = script.match(
+    /const screenColors\s*=\s*\[([\s\S]*?)\n\s*\];/,
+  )?.[1] ?? "";
+  assert.ok(
+    (colorsSource.match(/\bcolor\s*:/g) || []).length >= 8,
+    "the display test needs white, black, RGB, and several neutral-gray stages",
+  );
+  assertPattern(html, /\bdata-screen-progress\b/i);
+  assertPattern(html, /\bdata-action=["']screen-confirm-pass["']/i);
+  assertPattern(html, /\bdata-action=["']screen-confirm-stop["']/i);
+
+  const exitSource = script.match(
+    /async function exitScreenTest\(\) \{([\s\S]*?)\n\s*\}/,
+  )?.[1] ?? "";
+  assert.doesNotMatch(
+    exitSource,
+    /dataset\.state\s*=\s*["']pass["']/,
+    "leaving the display test must not silently count as a pass",
+  );
+});
+
+test("renders a substantial keyboard map and waits for every shown key", () => {
+  assertPattern(html, /\bdata-keyboard-map\b/i);
+  assertPattern(html, /\bdata-keyboard-count\b/i);
+  assert.ok(
+    (html.match(/\bdata-key-code=["'][^"']+["']/gi) || []).length >= 30,
+    "the keyboard test must show at least thirty real keys",
+  );
+
+  const codesSource = script.match(
+    /const requiredKeyboardCodes\s*=\s*\[([\s\S]*?)\];/,
+  )?.[1] ?? "";
+  const codes = [...codesSource.matchAll(/["']([^"']+)["']/g)].map(([, code]) => code);
+  assert.ok(codes.length >= 30, `expected a full keyboard sample, got ${codes.length}`);
+  for (const code of ["Digit1", "KeyA", "Space", "Backspace", "ShiftLeft", "ArrowUp"]) {
+    assert.ok(codes.includes(code), `keyboard sample must include ${code}`);
+  }
+});
+
+test("tests left and right audio channels before asking for a verdict", () => {
+  assertPattern(html, /\bdata-sound-channel=["']left["']/i);
+  assertPattern(html, /\bdata-sound-channel=["']right["']/i);
+  assertPattern(html, /\bdata-sound-answer=["']pass["']/i);
+  assertPattern(html, /\bdata-sound-answer=["']stop["']/i);
+  assertPattern(script, /createStereoPanner\s*\(/i);
+  assertPattern(script, /\.pan\.value\s*=/i);
+});
+
+test("keeps long secondary guidance and each field step progressively disclosed", () => {
+  assert.ok(
+    (html.match(/<details\b[^>]*\bdata-secondary-disclosure\b/gi) || []).length >= 2,
+    "long reference sections should be collapsed behind clear summaries",
+  );
+  assert.ok(
+    (html.match(/<details\b[^>]*\bdata-check-details\b/gi) || []).length >= 8,
+    "every on-site step needs a compact summary with expandable exact instructions",
+  );
+});
+
+test("shows dangerous progress immediately in the persistent status bar", () => {
+  assertPattern(html, /\bdata-progress-verdict\b/i);
+  assertPattern(html, /\bdata-progress-stop-count\b/i);
+  assertPattern(script, /progressVerdict/);
+  assertPattern(script, /progressStopCount/);
+  assertPattern(script, /statusLabels\[verdict\]/);
+});

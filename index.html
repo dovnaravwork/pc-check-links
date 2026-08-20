@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Пошаговая проверка подержанного Windows-ПК: официальные инструменты, контролируемая нагрузка, доказательства и решение покупать или нет.">
   <title>Проверка б/у ПК — маршрут покупателя</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
   <script src="commands.js" defer></script>
   <script src="script.js" defer></script>
@@ -12,40 +13,85 @@
 <body>
   <a class="skip-link" href="#route">К шагам проверки</a>
   <header class="topbar">
-    <a class="brand" href="#top" aria-label="К началу страницы"><span>PC</span> CHECK / FIELD GUIDE</a>
-    <nav aria-label="Разделы страницы">
-      <a href="#automation">Автоматизация</a>
-      <a href="#downloads">Инструменты</a>
-      <a href="#session">Проверка</a>
-      <a href="#route">Маршрут</a>
-      <a href="#decision">Решение</a>
-    </nav>
+    <a class="brand" href="#top" aria-label="К началу страницы"><span>PC</span><b>Проверка б/у компьютера</b></a>
+    <span class="local-note">Данные остаются в браузере</span>
   </header>
 
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow light">Проверка б/у Windows-ПК</p>
-        <h1 id="hero-title">Не покупай<br>железо <em>на словах.</em></h1>
-        <p class="lead">На встрече заложи примерно 25–30 минут: сверить комплектующие, SMART, физическое состояние и коротко проверить стабильность. После покупки дома можно пройти 90–120-минутный протокол, а затем Maximum на 8–12+ часов.</p>
+        <p class="eyebrow light">Пошаговый мастер · 25–30 минут</p>
+        <h1 id="hero-title">Проверь ПК<br>до оплаты.</h1>
+        <p class="lead">Сайт проведёт по экрану, комплектующим, дискам и коротким безопасным проверкам. Начни с одного из двух действий.</p>
         <div class="hero-actions">
           <button class="button primary" type="button" data-hero-action="usb">Подготовить флешку</button>
           <button class="button ghost" type="button" data-hero-action="guided">Проверить этот ПК</button>
         </div>
       </div>
       <aside class="brief" aria-label="Главное правило проверки">
-        <span class="brief-label">Правило № 1</span>
-        <strong>Сначала сведения.<br>Потом нагрузка.<br>Оплата — последней.</strong>
-        <p>Не вводи свои пароли и не отключай защиту Windows ради запуска файла.</p>
+        <span class="brief-label">Безопасный порядок</span>
+        <strong>Сведения → осмотр → короткая проверка → решение</strong>
+        <p>Не вводи свои пароли, не отключай Defender и не оплачивай ПК до итогового отчёта.</p>
       </aside>
     </section>
 
     <section id="browser-checks" class="browser-checks" aria-labelledby="browser-checks-title">
-      <div><p class="eyebrow">Браузерная проверка</p><h2 id="browser-checks-title">Экран, клавиши, звук</h2><p>Ничего не скачивает и работает прямо на сайте.</p></div>
-      <div class="browser-tools"><button class="button outline" type="button" data-browser-test="screen">Проверить цвета</button><button class="button outline" type="button" data-browser-test="keys">Проверить клавиши</button><button class="button outline" type="button" data-browser-test="sound">Проверить звук</button></div>
-      <div class="browser-result" data-browser-result role="status" aria-live="polite">Нажми кнопку и следуй подсказке.</div>
-      <div class="color-grid" data-color-grid hidden><span></span><span></span><span></span><span></span></div>
+      <div class="instrument-intro">
+        <div><p class="eyebrow">Шаг 01 · без установки</p><h2 id="browser-checks-title">Три теста прямо в браузере</h2></div>
+        <p>Каждый тест даёт отдельный результат. Ничего не скачивается и не отправляется.</p>
+      </div>
+      <div class="instrument-grid">
+        <article class="instrument-card" data-browser-card="screen" data-state="idle">
+          <div class="instrument-head"><span class="instrument-icon" aria-hidden="true">▣</span><span class="test-badge" data-test-badge>Ожидает</span></div>
+          <h3>Экран</h3>
+          <p>Восемь полноэкранных заливок для пикселей, пятен, засветов и неравномерности.</p>
+          <button class="button primary" type="button" data-browser-test="screen">Начать тест экрана</button>
+          <div class="test-result" data-test-result="screen" role="status" aria-live="polite">Результата пока нет.</div>
+        </article>
+
+        <article class="instrument-card" data-browser-card="keys" data-state="idle">
+          <div class="instrument-head"><span class="instrument-icon" aria-hidden="true">⌨</span><span class="test-badge" data-test-badge>Ожидает</span></div>
+          <h3>Клавиатура</h3>
+          <p>Нажми все показанные клавиши. Каждая подтверждённая клавиша станет зелёной.</p>
+          <button class="button primary" type="button" data-browser-test="keys">Начать / сбросить</button>
+          <div class="keyboard-test" data-keyboard-map hidden>
+            <div class="keyboard-meter"><span>Получено</span><b data-keyboard-count>0 / 49</b></div>
+            <div class="keyboard-row"><kbd data-key-code="Escape">Esc</kbd><kbd data-key-code="Digit1">1</kbd><kbd data-key-code="Digit2">2</kbd><kbd data-key-code="Digit3">3</kbd><kbd data-key-code="Digit4">4</kbd><kbd data-key-code="Digit5">5</kbd><kbd data-key-code="Digit6">6</kbd><kbd data-key-code="Digit7">7</kbd><kbd data-key-code="Digit8">8</kbd><kbd data-key-code="Digit9">9</kbd><kbd data-key-code="Digit0">0</kbd><kbd data-key-code="Backspace" class="key-wide">Backspace</kbd></div>
+            <div class="keyboard-row"><kbd data-key-code="Tab" class="key-wide">Tab</kbd><kbd data-key-code="KeyQ">Q</kbd><kbd data-key-code="KeyW">W</kbd><kbd data-key-code="KeyE">E</kbd><kbd data-key-code="KeyR">R</kbd><kbd data-key-code="KeyT">T</kbd><kbd data-key-code="KeyY">Y</kbd><kbd data-key-code="KeyU">U</kbd><kbd data-key-code="KeyI">I</kbd><kbd data-key-code="KeyO">O</kbd><kbd data-key-code="KeyP">P</kbd></div>
+            <div class="keyboard-row"><kbd data-key-code="CapsLock" class="key-wide">Caps</kbd><kbd data-key-code="KeyA">A</kbd><kbd data-key-code="KeyS">S</kbd><kbd data-key-code="KeyD">D</kbd><kbd data-key-code="KeyF">F</kbd><kbd data-key-code="KeyG">G</kbd><kbd data-key-code="KeyH">H</kbd><kbd data-key-code="KeyJ">J</kbd><kbd data-key-code="KeyK">K</kbd><kbd data-key-code="KeyL">L</kbd><kbd data-key-code="Enter" class="key-wide">Enter</kbd></div>
+            <div class="keyboard-row"><kbd data-key-code="ShiftLeft" class="key-wide">Shift</kbd><kbd data-key-code="KeyZ">Z</kbd><kbd data-key-code="KeyX">X</kbd><kbd data-key-code="KeyC">C</kbd><kbd data-key-code="KeyV">V</kbd><kbd data-key-code="KeyB">B</kbd><kbd data-key-code="KeyN">N</kbd><kbd data-key-code="KeyM">M</kbd><kbd data-key-code="ArrowUp">↑</kbd></div>
+            <div class="keyboard-row"><kbd data-key-code="ControlLeft">Ctrl</kbd><kbd data-key-code="AltLeft">Alt</kbd><kbd data-key-code="Space" class="key-space">Пробел</kbd><kbd data-key-code="ArrowLeft">←</kbd><kbd data-key-code="ArrowDown">↓</kbd><kbd data-key-code="ArrowRight">→</kbd></div>
+          </div>
+          <div class="test-result" data-test-result="keys" role="status" aria-live="polite">Результата пока нет.</div>
+        </article>
+
+        <article class="instrument-card" data-browser-card="sound" data-state="idle">
+          <div class="instrument-head"><span class="instrument-icon" aria-hidden="true">◖</span><span class="test-badge" data-test-badge>Ожидает</span></div>
+          <h3>Стереозвук</h3>
+          <p>Отдельно послушай левый и правый канал. Тон должен идти с указанной стороны.</p>
+          <button class="button primary" type="button" data-browser-test="sound">Начать тест звука</button>
+          <div class="sound-controls" data-sound-controls hidden>
+            <button class="button outline" type="button" data-sound-channel="left">Левый канал</button>
+            <button class="button outline" type="button" data-sound-channel="right">Правый канал</button>
+            <div class="sound-answer">
+              <button class="button status-pass" type="button" data-sound-answer="pass" disabled>Оба слышно</button>
+              <button class="button status-stop" type="button" data-sound-answer="stop" disabled>Есть проблема</button>
+            </div>
+          </div>
+          <div class="test-result" data-test-result="sound" role="status" aria-live="polite">Результата пока нет.</div>
+        </article>
+      </div>
     </section>
+
+    <div class="screen-overlay" data-screen-overlay hidden tabindex="-1" aria-label="Полноэкранная проверка дисплея">
+      <div class="screen-hud">
+        <span class="screen-progress" data-screen-progress>1 / 8</span>
+        <b data-screen-label>Белый фон · ищи пятна и битые пиксели</b>
+        <span>Осмотри всю площадь, затем переходи дальше. Esc закрывает тест без результата.</span>
+        <div class="screen-navigation"><button type="button" data-action="screen-next">Следующая заливка</button><button type="button" data-action="screen-exit">Выйти</button></div>
+        <div class="screen-confirm" data-screen-confirm hidden><button type="button" data-action="screen-confirm-pass">Дефектов не вижу</button><button type="button" data-action="screen-confirm-stop">Есть дефект</button></div>
+      </div>
+    </div>
 
     <section class="quick-strip" aria-label="Короткий план">
       <span><b>00</b> До встречи</span>
@@ -67,26 +113,24 @@
           <span class="automation-number">01 · МИНИМУМ РУТИНЫ</span>
           <h3>Подготовить и открыть проверку</h3>
           <p>Одна команда проверяет доверенный источник WinGet, устанавливает пять официальных утилит, сохраняет baseline событий, автоматически получает отчёты CPU-Z и CrystalDiskInfo и открывает GPU-Z, HWiNFO и OCCT.</p>
-          <label class="command-preview-label"><span>Точная команда, которая попадёт в буфер</span><textarea rows="5" readonly data-guided-command-preview aria-label="Команда подготовки управляемой проверки"></textarea></label>
           <button class="button dark" type="button" data-action="copy-guided-command">Скопировать запуск проверки</button>
-          <ul>
-            <li>Установка идёт только через точные ID доверенного источника WinGet.</li>
-            <li>Подпись каждого EXE проверяется перед запуском.</li>
-            <li>Нагрузку команда не запускает: настройки и Start/Stop остаются человеку.</li>
-          </ul>
+          <details class="command-details"><summary>Показать точную команду и запасной вариант</summary><div>
+            <label class="command-preview-label"><span>Этот текст попадёт в буфер обмена</span><textarea rows="5" readonly data-guided-command-preview aria-label="Команда подготовки управляемой проверки"></textarea></label>
+            <p class="command-fallback">Если копирование не сработало, выдели весь текст в поле, нажми Ctrl+C и вставь его в Терминал Windows.</p>
+            <ul><li>Установка идёт только через точные ID доверенного источника WinGet.</li><li>Подпись каждого EXE проверяется перед запуском.</li><li>Нагрузку команда не запускает: настройки и Start/Stop остаются человеку.</li></ul>
+          </div></details>
         </article>
 
         <article class="automation-card">
           <span class="automation-number">02 · БЕЗ УСТАНОВКИ</span>
           <h3>Автопроверка Windows</h3>
           <p>За 1–2 минуты собирает CPU, GPU, RAM, состояние дисков, проблемные устройства, WHEA и статус Defender. Сохраняет JSON и открывает понятную сводку на рабочем столе.</p>
-          <label class="command-preview-label"><span>Точная команда, которая попадёт в буфер</span><textarea rows="5" readonly data-autocheck-command-preview aria-label="Команда автоматической проверки Windows"></textarea></label>
           <button class="button dark" type="button" data-action="copy-autocheck-command">Скопировать автопроверку</button>
-          <ul>
-            <li>Работает локально и ничего не скачивает.</li>
-            <li>Не меняет VPN, Defender или настройки Windows.</li>
-            <li>Не запускает нагрузку и не выдаёт неполную проверку за окончательную.</li>
-          </ul>
+          <details class="command-details"><summary>Показать диагностический скрипт и fallback</summary><div>
+            <label class="command-preview-label"><span>Этот текст попадёт в буфер обмена</span><textarea rows="5" readonly data-autocheck-command-preview aria-label="Команда автоматической проверки Windows"></textarea></label>
+            <p class="command-fallback">Если копирование недоступно, выдели поле целиком, нажми Ctrl+C и вставь текст в Терминал Windows.</p>
+            <ul><li>Работает локально и ничего не скачивает.</li><li>Не меняет VPN, Defender или настройки Windows.</li><li>Не запускает нагрузку и не выдаёт неполную проверку за окончательную.</li></ul>
+          </div></details>
         </article>
 
         <article class="automation-card">
@@ -94,9 +138,12 @@
           <h3>Вся флешка одной командой</h3>
           <p>Укажи букву съёмной флешки. Команда проверит официальный источник WinGet и попытается скачать пять зафиксированных версий. Комплект получит отметку COMPLETE только после хэшей и Defender. Ничего не устанавливается и не запускается.</p>
           <label class="drive-field"><span>Буква флешки</span><input type="text" value="E:" maxlength="2" inputmode="text" autocomplete="off" spellcheck="false" data-usb-drive aria-describedby="drive-help"></label>
-          <label class="command-preview-label"><span>Точная команда, которая попадёт в буфер</span><textarea rows="5" readonly data-usb-command-preview aria-label="Команда подготовки флешки"></textarea></label>
+          <p id="drive-help" class="automation-help">Только съёмный диск, например E: или F:. Внутренний диск команда отклонит.</p>
           <button class="button outline" type="button" data-action="copy-usb-command">Скопировать команду для флешки</button>
-          <p id="drive-help" class="automation-help">Если флешка отображается как F:, замени E: на F:. Внутренний диск команда отклонит. После вставки сравни начало и конец с полем выше и только потом нажимай Enter.</p>
+          <details class="command-details"><summary>Показать точную команду и fallback</summary><div>
+            <label class="command-preview-label"><span>Этот текст попадёт в буфер обмена</span><textarea rows="5" readonly data-usb-command-preview aria-label="Команда подготовки флешки"></textarea></label>
+            <p class="automation-help">Если флешка отображается как F:, замени E: на F:. Если копирование не сработало, выдели поле целиком и нажми Ctrl+C. После вставки сравни начало и конец с полем выше и только потом нажимай Enter.</p>
+          </div></details>
         </article>
       </div>
       <p class="automation-feedback" data-automation-feedback aria-live="polite"></p>
@@ -108,6 +155,8 @@
       <noscript><p class="noscript-note">JavaScript выключен: кнопки копирования не работают. Включи JavaScript или используй ручные шаги ниже.</p></noscript>
     </section>
 
+    <details class="secondary-disclosure" data-secondary-disclosure>
+      <summary><span><b>Если автоматическая подготовка не подходит</b><small>Ручная флешка, официальные ссылки и проверка файлов</small></span></summary>
     <section id="downloads" class="section downloads" aria-labelledby="downloads-title">
       <div class="section-intro">
         <div>
@@ -173,6 +222,7 @@
         <div><p><b>1.</b> Скачай дома. <b>2.</b> Проверь файл Защитником Windows. <b>3.</b> Для EXE — правой кнопкой → Свойства → Цифровые подписи → Сведения: должно быть «Цифровая подпись действительна». ZIP сам может быть не подписан — проверь EXE внутри после распаковки. <b>4.</b> Если автор публикует SHA-256, сравни его через PowerShell: <code>Get-FileHash .\имя-файла.exe -Algorithm SHA256</code>. <b>5.</b> Сохрани рядом текстовый manifest: имя, версия, SHA-256, дата и URL.</p><p><b>Если любой файл недоступен:</b> не ищи репак или случайное зеркало. Используй заранее проверенную флешку; если без программы обязательный пункт нельзя подтвердить, отметь «Не проверено» и не оплачивай ПК.</p><p class="publisher-note"><b>Проверенный издатель UAC:</b> CPU-Z — <b>CPUID</b>; HWiNFO — <b>REALiX, s.r.o.</b> Если Windows показывает «Неизвестный издатель» / Unknown publisher — <b>СТОП, нажми «Нет» и отмени запуск</b>. Для остальных файлов не угадывай издателя: сверяй подпись и хэш с официальной страницей.</p></div>
       </aside>
     </section>
+    </details>
 
     <section id="session" class="section session" aria-labelledby="session-title">
       <div class="section-intro compact">
@@ -190,6 +240,8 @@
       <noscript><p class="noscript-note">JavaScript выключен: инструкция ниже доступна, но статусы, сохранение и отчёт работать не будут.</p></noscript>
     </section>
 
+    <details class="secondary-disclosure" data-secondary-disclosure>
+      <summary><span><b>Если на проверку есть больше времени</b><small>Домашний и максимальный профили без ложного обещания «одной кнопки»</small></span></summary>
     <section id="test-profiles" class="section test-profiles" aria-labelledby="profiles-title">
       <div class="section-intro">
         <div><p class="eyebrow">Выбери глубину</p><h2 id="profiles-title">Быстрого «полностью исправен» не бывает.</h2></div>
@@ -225,6 +277,7 @@
         <p>Мы ставим Power последним как более осторожное отклонение от рекомендации OCCT запускать его первым. Успешный Power <b>не доказывает исправность БП</b>: программа не измеряет ripple, hold-up time и работу защит.</p>
       </aside>
     </section>
+    </details>
 
     <section id="route" class="section route" aria-labelledby="route-title">
       <div class="route-head">
@@ -237,49 +290,49 @@
       <ol class="route-list">
         <li data-check="inspection" data-check-title="Осмотр до включения">
           <div class="route-time">0–5 мин</div>
-          <div class="route-copy"><h3>Осмотр и холодный запуск</h3><p>Сфотографируй общий вид, читаемую наклейку блока питания, питание видеокарты, слоты RAM/M.2 и серийные номера. Проверь пломбы, коррозию, следы жидкости, гари и грубого ремонта. Сам блок питания не вскрывай и ничего внутри него не измеряй. Попроси включить ПК из полностью выключенного состояния: обрати внимание на ошибки старта, посторонний треск и запах.</p><p class="stop"><b>Стоп:</b> запах гари, потемнения, жидкость, искры, оголённые провода, нечитаемая/отсутствующая наклейка БП у игрового ПК, сбой холодного запуска или продавец запрещает открыть корпус.</p></div>
+          <div class="route-copy"><h3>Осмотр и холодный запуск</h3><p class="route-summary">Корпус, блок питания, следы ремонта и первый запуск — до любых программ.</p><details data-check-details><summary>Точные шаги и стоп-факторы</summary><div class="check-instructions"><p>Сфотографируй общий вид, читаемую наклейку блока питания, питание видеокарты, слоты RAM/M.2 и серийные номера. Проверь пломбы, коррозию, следы жидкости, гари и грубого ремонта. Сам блок питания не вскрывай и ничего внутри него не измеряй. Попроси включить ПК из полностью выключенного состояния: обрати внимание на ошибки старта, посторонний треск и запах.</p><p class="stop"><b>Стоп:</b> запах гари, потемнения, жидкость, искры, оголённые провода, нечитаемая/отсутствующая наклейка БП у игрового ПК, сбой холодного запуска или продавец запрещает открыть корпус.</p></div></details></div>
           <div class="evidence"><span>Доказательство</span><b>5–7 фото корпуса</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат осмотра"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Что увидел и какие фото сделал"></textarea></label></div>
         </li>
         <li data-check="components" data-check-title="Состав компьютера">
           <div class="route-time">5–9 мин</div>
-          <div class="route-copy"><h3>Сверка состава</h3><p>CPU-Z: CPU, Mainboard, Memory, по очереди каждый Slot в SPD. GPU-Z: название, Memory Size и Bus Interface; нажми «?» и запусти Render Test — шина должна перейти из режима простоя. Открой Диспетчер устройств: жёлтый восклицательный знак означает проблему — открой свойства устройства и запиши код.</p><p class="trade"><b>Торг:</b> одна планка RAM при честно заявленном общем объёме или другой заранее оговорённый недорогой компонент. <b>Стоп:</b> модель CPU/GPU/платы, VRAM, объём RAM или накопителя не совпадают с объявлением — сначала продавец должен объяснить расхождение и пересчитать цену.</p></div>
+          <div class="route-copy"><h3>Сверка состава</h3><p class="route-summary">Сопоставь объявление с CPU, GPU, платой, RAM и устройствами Windows.</p><details data-check-details><summary>Точные шаги и стоп-факторы</summary><div class="check-instructions"><p>CPU-Z: CPU, Mainboard, Memory, по очереди каждый Slot в SPD. GPU-Z: название, Memory Size и Bus Interface; нажми «?» и запусти Render Test — шина должна перейти из режима простоя. Открой Диспетчер устройств: жёлтый восклицательный знак означает проблему — открой свойства устройства и запиши код.</p><p class="trade"><b>Торг:</b> одна планка RAM при честно заявленном общем объёме или другой заранее оговорённый недорогой компонент. <b>Стоп:</b> модель CPU/GPU/платы, VRAM, объём RAM или накопителя не совпадают с объявлением — сначала продавец должен объяснить расхождение и пересчитать цену.</p></div></details></div>
           <div class="evidence"><span>Доказательство</span><b>6 скриншотов</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат сверки состава"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="CPU, GPU, RAM и отличия от объявления"></textarea></label></div>
         </li>
         <li data-check="storage" data-check-title="Накопители и SMART">
           <div class="route-time">9–13 мин</div>
-          <div class="route-copy"><h3>Каждый накопитель</h3><p>В CrystalDiskInfo переключи диски стрелками. Сними Health Status, температуру, часы и SMART. Уточни, какой диск входит в продажу.</p><p class="stop"><b>Стоп:</b> Bad, пропадающий диск или у HDD значения 05, C5 либо C6 больше нуля. <b>Торг только с ценой немедленной замены:</b> Caution из-за малого остатка ресурса SSD. <b>Не проверено:</b> Unknown, USB или RAID требуют отдельной диагностики и не считаются чистым результатом. Good тоже не гарантирует будущую исправность.</p></div>
+          <div class="route-copy"><h3>Каждый накопитель</h3><p class="route-summary">Проверь Health, температуру, часы и SMART отдельно для каждого диска.</p><details data-check-details><summary>Точные шаги и стоп-факторы</summary><div class="check-instructions"><p>В CrystalDiskInfo переключи диски стрелками. Сними Health Status, температуру, часы и SMART. Уточни, какой диск входит в продажу.</p><p class="stop"><b>Стоп:</b> Bad, пропадающий диск или у HDD значения 05, C5 либо C6 больше нуля. <b>Торг только с ценой немедленной замены:</b> Caution из-за малого остатка ресурса SSD. <b>Не проверено:</b> Unknown, USB или RAID требуют отдельной диагностики и не считаются чистым результатом. Good тоже не гарантирует будущую исправность.</p></div></details></div>
           <div class="evidence"><span>Доказательство</span><b>1 кадр на диск</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат проверки дисков"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Модели, Health, часы и важные SMART"></textarea></label></div>
         </li>
         <li data-check="cpu" data-check-title="CPU и CPU+RAM">
           <div class="route-time">13–18 мин</div>
-          <div class="route-copy"><h3>Короткий CPU-отсев</h3><p><b>До Start:</b> получи согласие продавца, открой HWiNFO Sensors и запиши baseline WHEA — журнал не очищай. В OCCT дождись countdown, сначала найди <b>Stop</b>, затем нажми <b>Start</b>. Для On-site Screen запусти CPU-only 3 минуты, затем CPU+RAM Large 2 минуты. Это только быстрый отсев, не доказательство полной стабильности.</p><p class="stop"><b>Нажми Stop немедленно</b> при ошибке OCCT, новом WHEA, BSOD, зависании, перезагрузке, запахе, треске или продолжающемся росте температуры у аппаратного лимита.</p></div>
+          <div class="route-copy"><h3>Короткий CPU-отсев</h3><p class="route-summary">CPU отдельно, затем CPU+RAM — коротко, с HWiNFO и кнопкой Stop на виду.</p><details data-check-details><summary>Точные настройки и аварийная остановка</summary><div class="check-instructions"><p><b>До Start:</b> получи согласие продавца, открой HWiNFO Sensors и запиши baseline WHEA — журнал не очищай. В OCCT дождись countdown, сначала найди <b>Stop</b>, затем нажми <b>Start</b>. Для On-site Screen запусти CPU-only 3 минуты, затем CPU+RAM Large 2 минуты. Это только быстрый отсев, не доказательство полной стабильности.</p><p class="stop"><b>Нажми Stop немедленно</b> при ошибке OCCT, новом WHEA, BSOD, зависании, перезагрузке, запахе, треске или продолжающемся росте температуры у аппаратного лимита.</p></div></details></div>
           <div class="evidence"><span>Доказательство</span><b>2 итога OCCT + HWiNFO Max</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат CPU и CPU RAM"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Настройки · время · ошибки · CPU Package · частоты"></textarea></label></div>
         </li>
         <li data-check="memory" data-check-title="Оперативная память">
           <div class="route-time">18–21 мин</div>
-          <div class="route-copy"><h3>Короткая память</h3><p>Используй <b>80% свободной памяти</b>, а не 80% установленного объёма. Выбери preset с блоками <b>Check</b> и запусти 3 минуты. Windows-тест не охватывает занятую ОС память; полноценная проверка RAM остаётся домашним этапом MemTest86/OCCT.</p><p class="stop"><b>Стоп:</b> любая ошибка.</p></div>
+          <div class="route-copy"><h3>Короткая память</h3><p class="route-summary">Три минуты на 80% свободной памяти; любая ошибка — стоп.</p><details data-check-details><summary>Точные настройки и ограничение теста</summary><div class="check-instructions"><p>Используй <b>80% свободной памяти</b>, а не 80% установленного объёма. Выбери preset с блоками <b>Check</b> и запусти 3 минуты. Windows-тест не охватывает занятую ОС память; полноценная проверка RAM остаётся домашним этапом MemTest86/OCCT.</p><p class="stop"><b>Стоп:</b> любая ошибка.</p></div></details></div>
           <div class="evidence"><span>Доказательство</span><b>Preset + объём + итог</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат памяти"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Preset · свободная память · ошибки · длительность"></textarea></label></div>
         </li>
         <li data-check="gpu" data-check-title="GPU 3D Adaptive">
           <div class="route-time">21–26 мин</div>
-          <div class="route-copy"><h3>Короткий GPU-отсев</h3><p>OCCT <b>3D Adaptive → Variable → 15%–100%</b> на 5 минут, затем проверь <b>GPU Core</b>, <b>GPU Hot Spot</b> и <b>GPU Memory / VRAM</b> в HWiNFO. Промежуточные режимы полезны, но 5 минут не заменяют домашние 30 минут. Нет универсального температурного порога: сверяйся с лимитом конкретной модели и ищи троттлинг. Артефакт, driver reset или потеря изображения — немедленный STOP.</p><p class="thermal-note"><b>Если Hot Spot настораживает:</b> сначала проверь пыль → повтори тот же тест дома → проверь обдув и воздушный поток → заложи обслуживание. Не меняй fan curve, GCC или BIOS-настройки на встрече.</p></div>
+          <div class="route-copy"><h3>Короткий GPU-отсев</h3><p class="route-summary">Пять минут 3D Adaptive с отдельным контролем Core, Hot Spot и VRAM.</p><details data-check-details><summary>Точные настройки, температуры и Stop</summary><div class="check-instructions"><p>OCCT <b>3D Adaptive → Variable → 15%–100%</b> на 5 минут, затем проверь <b>GPU Core</b>, <b>GPU Hot Spot</b> и <b>GPU Memory / VRAM</b> в HWiNFO. Промежуточные режимы полезны, но 5 минут не заменяют домашние 30 минут. Нет универсального температурного порога: сверяйся с лимитом конкретной модели и ищи троттлинг. Артефакт, driver reset или потеря изображения — немедленный STOP.</p><p class="thermal-note"><b>Если Hot Spot настораживает:</b> сначала проверь пыль → повтори тот же тест дома → проверь обдув и воздушный поток → заложи обслуживание. Не меняй fan curve, GCC или BIOS-настройки на встрече.</p></div></details></div>
           <div class="evidence"><span>Доказательство</span><b>OCCT Adaptive + HWiNFO Max</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат GPU"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Core · Hot Spot · VRAM · частоты · ошибки"></textarea></label></div>
         </li>
         <li data-check="vram" data-check-title="Видеопамять VRAM">
           <div class="route-time">26–28 мин</div>
-          <div class="route-copy"><h3>VRAM и изображение</h3><p>Запусти VRAM на 2 минуты или выполни визуальный Render Test GPU-Z. Это быстрый отсев; домашний VRAM-тест — 15 минут.</p><p class="stop"><b>Стоп:</b> любая ошибка VRAM, артефакт, потеря изображения, driver reset, зависание или перезагрузка.</p></div>
+          <div class="route-copy"><h3>VRAM и изображение</h3><p class="route-summary">Короткий тест видеопамяти и визуальный контроль изображения.</p><details data-check-details><summary>Точные шаги и стоп-факторы</summary><div class="check-instructions"><p>Запусти VRAM на 2 минуты или выполни визуальный Render Test GPU-Z. Это быстрый отсев; домашний VRAM-тест — 15 минут.</p><p class="stop"><b>Стоп:</b> любая ошибка VRAM, артефакт, потеря изображения, driver reset, зависание или перезагрузка.</p></div></details></div>
           <div class="evidence"><span>Доказательство</span><b>VRAM 80% + итог</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат VRAM"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Объём теста · ошибки · артефакты · длительность"></textarea></label></div>
         </li>
         <li data-check="ports" data-check-title="Порты и системные события">
           <div class="route-time">28–30 мин</div>
-          <div class="route-copy"><h3>Порты и финальная сверка</h3><p>Проверь USB флешкой, звук, Ethernet/Wi‑Fi и заявленные видеовыходы. Затем открой сохранённый скриптом post-check: новые <b>WHEA, BugCheck, Kernel-Power 41, Display 4101, disk, stornvme или storahci</b> сравниваются только с временем этого теста. Журнал не очищай. Повторно открой CrystalDiskInfo и сверь каждый диск после нагрузки.</p><p class="stop"><b>Стоп:</b> новое критичное системное событие, новый SMART/media error, пропавший диск или ошибка повторной диагностики. Старые записи за другую дату — контекст, но не результат текущей проверки.</p><p class="trade"><b>Торг:</b> неработающий вторичный порт, шумный вентилятор, слабая батарейка CMOS. Неисправный основной видеовыход или сетевой адаптер — только если готов ремонтировать.</p></div>
+          <div class="route-copy"><h3>Порты и финальная сверка</h3><p class="route-summary">Порты, сеть, звук и только новые системные события этой сессии.</p><details data-check-details><summary>Точные шаги, события и стоп-факторы</summary><div class="check-instructions"><p>Проверь USB флешкой, звук, Ethernet/Wi‑Fi и заявленные видеовыходы. Затем открой сохранённый скриптом post-check: новые <b>WHEA, BugCheck, Kernel-Power 41, Display 4101, disk, stornvme или storahci</b> сравниваются только с временем этого теста. Журнал не очищай. Повторно открой CrystalDiskInfo и сверь каждый диск после нагрузки.</p><p class="stop"><b>Стоп:</b> новое критичное системное событие, новый SMART/media error, пропавший диск или ошибка повторной диагностики. Старые записи за другую дату — контекст, но не результат текущей проверки.</p><p class="trade"><b>Торг:</b> неработающий вторичный порт, шумный вентилятор, слабая батарейка CMOS. Неисправный основной видеовыход или сетевой адаптер — только если готов ремонтировать.</p></div></details></div>
           <div class="evidence"><span>Доказательство</span><b>Фото портов + итог</b></div>
           <div class="check-entry"><div class="status-controls" aria-label="Результат проверки портов"><button type="button" data-status="pass" aria-pressed="false">Пройдено</button><button type="button" data-status="caution" aria-pressed="false">Торг</button><button type="button" data-status="stop" aria-pressed="false">Стоп</button><button type="button" data-status="unverified" aria-pressed="false">Не проверено</button></div><label>Заметка<textarea data-note rows="2" placeholder="Порты, сеть, звук и новые WHEA"></textarea></label></div>
         </li>
@@ -318,5 +371,14 @@
     <p><b>Важно:</b> не вводи свои пароли на чужом ПК, не подключай личный облачный диск и не отключай антивирус по просьбе продавца.</p>
     <p>Версии проверены 19.08.2026 · Файлы загружаются с сайтов авторов или указанных ими площадок, не с этой страницы.</p>
   </footer>
+
+  <aside class="check-progress" data-check-progress aria-label="Прогресс проверки">
+    <div class="check-progress-bar"><i data-check-progress-bar></i></div>
+    <div class="check-progress-content">
+      <span class="progress-count"><b data-check-progress-count>0 / 8</b> шагов отмечено</span>
+      <span class="progress-risk"><b data-progress-verdict>НЕ ПРОВЕРЕНО</b><small data-progress-stop-count>СТОП: 0</small></span>
+      <a href="#decision">Открыть итог</a>
+    </div>
+  </aside>
 </body>
 </html>
